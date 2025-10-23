@@ -27,12 +27,10 @@ modules:
       
       # Your layered tools
       - btop
-      - eza
       - fastfetch
       #- k6
       - podman-compose
       - java
-      - starship
       - fzf
       
     remove:

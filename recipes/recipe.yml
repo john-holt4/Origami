@@ -18,6 +18,8 @@ modules:
     repos:
       # Add the repo for Cloudflare Warp
       - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
+      # Add the repo for k6
+      - https://dl.k6.io/rpm/k6.repo
     
     install:
       # Cloudflare
@@ -29,7 +31,7 @@ modules:
       - fastfetch
       - k6
       - podman-compose
-      - java-latest-openjdk # Provides java
+      - java
       - starship
       - fzf
       

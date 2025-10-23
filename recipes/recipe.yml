@@ -11,25 +11,12 @@ base-image: ghcr.io/ublue-os/cosmic-atomic-main
 image-version: latest # This will track the latest stable release
 
 modules:
-  #
-  # RPM/OSTREE CONFIGURATION
-  #
-  #- type: rpm-ostree
-   # repos:
-      # Add the repo for Cloudflare Warp
-    #  - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
-      # Add the repo for k6
-     # - https://dl.k6.io/rpm/k6.repo
-    
+
     install:
-      # Cloudflare
-      #- cloudflare-warp
-      
       # Your layered tools
       - btop
       - eza
       - fastfetch
-      #- k6
       - podman-compose
       - java
       - starship

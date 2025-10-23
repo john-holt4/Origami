@@ -80,8 +80,6 @@ modules:
         destination: /
 
   #
-  # UB BATTERIES & SIGNING
-  # These are the standard modules that add codecs, ujust, etc.
+  # SIGNING
   #
-  - type: main
   - type: signing

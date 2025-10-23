@@ -33,12 +33,12 @@ modules:
       - java
       - fzf
       
-    remove:
+    #remove:
       # Your list of removed packages
-      - firefox
-      - firefox-langpacks
-      - gnome-disk-utility
-      - gnome-system-monitor
+      #- firefox
+      #- firefox-langpacks
+      #- gnome-disk-utility
+      #- gnome-system-monitor
 
   #
   # FLATPAK CONFIGURATION

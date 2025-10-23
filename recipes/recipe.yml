@@ -1,21 +1,18 @@
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+#
+# Name of your image
+name: origami
 
-#
-# NAME & DESCRIPTION
-#
-name: Origami
-description: "A custom Cosmic Atomic image. Folds in cloudflare-warp, developer tools, and a curated Flatpak suite."
+# A short description of your image
+description: A custom Fedora Cosmic image with developer tools and a curated Flatpak suite.
 
-#
-# BASE IMAGE
-#
+# The base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/cosmic-atomic-main
-image-version: latest
+image-version: latest # Or use 40 to pin to a specific Fedora version
 
+# Module configuration, executed in order
 modules:
-  #
-  # RPM/OSTREE CONFIGURATION
-  #
+  # This module handles all RPM package changes
   - type: rpm-ostree
     repos:
       # Add the repo for Cloudflare Warp
@@ -31,7 +28,7 @@ modules:
       - fastfetch
       - k6
       - podman-compose
-      - java
+      - java-latest-openjdk # Provides java
       - starship
       - fzf
       
@@ -42,15 +39,31 @@ modules:
       - gnome-disk-utility
       - gnome-system-monitor
 
-  #
-  # FLATPAK CONFIGURATION
-  #
+  # This module adds your custom aliases and shell config
+  - type: files
+    files:
+      # Copies the 'etc' folder from your repo into /etc/ on the image
+      - source: etc
+        destination: /
+
+  # This module handles Flatpak configuration
   - type: default-flatpaks
+    # This section configures the flatpak remotes
     repos:
-      - name: cosmic
+      flathub:
+        # Installs the flathub remote, filtered to only include apps you list
+        # and not runtimes, which are handled automatically
+        type: filtered
+        url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        only-apps: true # Set this to false if you need to install runtimes directly
+      
+      cosmic:
+        # Adds the custom COSMIC flatpak repo
         url: https://apt.pop-os.org/cosmic/
         
+    # This section installs flatpaks from the defined repos
     install:
+      # From Flathub
       - app.zen_browser.zen
       - com.github.tchx84.Flatseal
       - com.spotify.Client
@@ -61,23 +74,16 @@ modules:
       - org.gnome.Loupe
       - org.onlyoffice.desktopeditors
       - us.zoom.Zoom
+      
+      # From Cosmic
+      - co.uk.cappsy.CosmicAppletLogoMenu::cosmic
+      - io.github.cosmic_utils.sysinfo-applet::cosmic
 
-    install-from:
-      - repo: cosmic
-        apps:
-          - co.uk.cappsy.CosmicAppletLogoMenu
-          - io.github.cosmic_utils.sysinfo-applet
-          
-  #
-  # ADD CUSTOM ALIASES & SHELL CONFIG
-  #
-  - type: files
-    files:
-      - source: etc
-        destination: /
+  # These modules include the standard Universal Blue "batteries"
+  # like codecs, ujust, hardware support, etc.
+  - type: from-file
+    file: ublue-os/main.yml
 
-  #
-  # UB BATTERIES & SIGNING
-  #
-  - type: ublue-os/main
-  - type: ublue-os/signing
+  # This module handles signing your image
+  - type: from-file
+    file: ublue-os/signing.yml

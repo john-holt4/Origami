@@ -29,7 +29,7 @@ modules:
       - fastfetch
       - k6
       - podman-compose
-      - java-latest-openjdk-headless # Provides java
+      - java-latest-openjdk # Provides java
       - starship
       - fzf
       
@@ -83,5 +83,5 @@ modules:
   # UB BATTERIES & SIGNING
   # These are the standard modules that add codecs, ujust, etc.
   #
-  - type: ublue-os/main
-  - type: ublue-os/signing
+  - type: main
+  - type: signing

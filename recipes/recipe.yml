@@ -1,45 +1,83 @@
----
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-# image will be published to ghcr.io/<user>/<name>
+
+#
+# NAME & DESCRIPTION
+#
 name: Origami
-# description will be included in the image's metadata
-description: This is my personal OS image.
+description: "A custom Cosmic Atomic image. Folds in cloudflare-warp, developer tools, and a curated Flatpak suite."
 
-# the base image to build on top of (FROM) and the version tag to use
-base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 42 # latest is also supported if you want new updates ASAP
+#
+# BASE IMAGE
+#
+base-image: ghcr.io/ublue-os/cosmic-atomic-main
+image-version: latest
 
-# module configuration, executed in order
-# you can include multiple instances of the same module
 modules:
+  #
+  # RPM/OSTREE CONFIGURATION
+  #
+  - type: rpm-ostree
+    repos:
+      # Add the repo for Cloudflare Warp
+      - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
+    
+    install:
+      # Cloudflare
+      - cloudflare-warp
+      
+      # Your layered tools
+      - btop
+      - eza
+      - fastfetch
+      - k6
+      - podman-compose
+      - java
+      - starship
+      - fzf
+      
+    remove:
+      # Your list of removed packages
+      - firefox
+      - firefox-langpacks
+      - gnome-disk-utility
+      - gnome-system-monitor
+
+  #
+  # FLATPAK CONFIGURATION
+  #
+  - type: default-flatpaks
+    repos:
+      - name: cosmic
+        url: https://apt.pop-os.org/cosmic/
+        
+    install:
+      - app.zen_browser.zen
+      - com.github.tchx84.Flatseal
+      - com.spotify.Client
+      - com.visualstudio.code
+      - com.vixalien.sticky
+      - io.github.piotrek_k._2dTaskBoard
+      - io.podman_desktop.PodmanDesktop
+      - org.gnome.Loupe
+      - org.onlyoffice.desktopeditors
+      - us.zoom.Zoom
+
+    install-from:
+      - repo: cosmic
+        apps:
+          - co.uk.cappsy.CosmicAppletLogoMenu
+          - io.github.cosmic_utils.sysinfo-applet
+          
+  #
+  # ADD CUSTOM ALIASES & SHELL CONFIG
+  #
   - type: files
     files:
-      - source: system
-        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
+      - source: etc
+        destination: /
 
-  - type: dnf
-    repos:
-      copr:
-        - atim/starship
-    install:
-      packages:
-        - micro
-        - starship
-    remove:
-      packages:
-        # example: removing firefox (in favor of the flatpak)
-        # "firefox" is the main package, "firefox-langpacks" is a dependency
-        - firefox
-        - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
-
-  - type: default-flatpaks
-    configurations:
-      - notify: true # Send notification after install/uninstall is finished (true/false)
-        scope: system
-        # If no repo information is specified, Flathub will be used by default
-        install: # system flatpaks we want all users to have and not remove
-          - org.mozilla.firefox
-          - org.gnome.Loupe
-      - scope: user # Also add Flathub user repo, but no user packages
-
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
+  #
+  # UB BATTERIES & SIGNING
+  #
+  - type: ublue-os/main
+  - type: ublue-os/signing

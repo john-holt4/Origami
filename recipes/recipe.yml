@@ -54,7 +54,7 @@ modules:
 
   - type: script
     snippets:
-      - mv /usr/share/plymouth/themes/spinner/watermark.png /usr/share/plymouth/themes/spinner/watermark.png.bak
+      - sed -i 's/WatermarkVerticalAlignment=.*/WatermarkVerticalAlignment=2/g' /usr/share/plymouth/themes/bgrt/bgrt.plymouth
       - dracut -f --regenerate-all
 
   - type: os-release

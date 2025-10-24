@@ -43,15 +43,14 @@ modules:
   #
   - type: files
     files:
-      # Copies the 'etc' folder from your repo into /etc/ on the image
-      - source: etc
-        destination: /
+      - source: system
+        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
 
   - type: os-release
     properties:
       ID: origami_beta
       NAME: Oragami
-      PRETTY_NAME: Oragami Image
+      PRETTY_NAME: Oragami 折り紙
 
   #
   # SIGNING

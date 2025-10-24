@@ -32,8 +32,6 @@ modules:
       - podman-compose
       - java
       - fzf
-      - ark
-      - ark-libs
       
     remove:
       # Your list of removed packages
@@ -43,6 +41,8 @@ modules:
       - firefox-langpacks
       - gnome-disk-utility
       - gnome-system-monitor
+      - ark
+      - ark-libs
 
   #
   # ADD CUSTOM ALIASES & SHELL CONFIG

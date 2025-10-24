@@ -9,12 +9,12 @@ alias docker-compose='podman-compose'
 alias cat='bat'
 
 # eza aliases
-alias l='eza'
-alias ls='eza'                 # A "safe" override for interactive use
-alias ll='eza -l'              # long list
-alias la='eza -la'             # long list, all files
-alias l.='eza -la --ignore=.git' # A good one for projects
-alias lt='eza --tree --level=2'  # tree view
+alias l='eza --icons'
+alias ls='eza --icons'                 # A "safe" override for interactive use
+alias ll='eza -l --icons'              # long list
+alias la='eza -la --icons'             # long list, all files
+alias l.='eza -la --ignore=.git --icons' # A good one for projects
+alias lt='eza --tree --level=2 --icons'  # tree view
 
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"

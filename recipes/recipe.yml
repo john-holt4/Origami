@@ -15,60 +15,29 @@ modules:
   # RPM/OSTREE CONFIGURATION
   #
   - type: rpm-ostree
-    #repos:
+    repos:
       # Add the repo for Cloudflare Warp
-      #- https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
-      # Add the repo for k6
-      #- https://dl.k6.io/rpm/k6.repo
+      - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
+    keys:
+      # Import the GPG key for the Cloudflare repo
+      - https://pkg.cloudflareclient.com/pubkey.gpg
     
     install:
       # Cloudflare
-      #- cloudflare-warp
+      - cloudflare-warp
       
       # Your layered tools
       - btop
       - fastfetch
-      #- k6
       - podman-compose
       - java
       - fzf
       
-    #remove:
+    remove:
       # Your list of removed packages
-      #- firefox
-      #- firefox-langpacks
-      #- gnome-disk-utility
-      #- gnome-system-monitor
-
-  #
-  # FLATPAK CONFIGURATION
-  #
-  - type: default-flatpaks
-    configurations:
-      - repos:
-          # Add the COSMIC Flatpak repository
-          cosmic:
-            url: https://apt.pop-os.org/cosmic/
-        
-        # Install apps from Flathub (the default)
-        install:
-          - app.zen_browser.zen
-          - com.github.tchx84.Flatseal
-          - com.spotify.Client
-          - com.visualstudio.code
-          - com.vixalien.sticky
-          - io.github.piotrek_k._2dTaskBoard
-          - io.podman_desktop.PodmanDesktop
-          - org.gnome.Loupe
-          - org.onlyoffice.desktopeditors
-          - us.zoom.Zoom
-
-        # Install apps from the 'cosmic' repo we just added
-        install-from:
-          - repo: cosmic
-            apps:
-              - co.uk.cappsy.CosmicAppletLogoMenu
-              - io.github.cosmic_utils.sysinfo-applet
+      - arc
+      - htop
+      - nvtop
           
   #
   # ADD CUSTOM ALIASES & SHELL CONFIG
@@ -78,6 +47,12 @@ modules:
       # Copies the 'etc' folder from your repo into /etc/ on the image
       - source: etc
         destination: /
+
+  - type: os-release
+    properties:
+      ID: origami_beta
+      NAME: Oragami
+      PRETTY_NAME: Oragami Image
 
   #
   # SIGNING

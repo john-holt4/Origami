@@ -31,7 +31,6 @@ modules:
       - fastfetch
       - podman-compose
       - java
-      - fzf
       
     remove:
       # Your list of removed packages

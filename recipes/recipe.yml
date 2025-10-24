@@ -54,7 +54,7 @@ modules:
 
   - type: script
     snippets:
-      - sed -i 's/UseFirmwareBackground=true/UseFirmwareBackground=false/g' /usr/share/plymouth/themes/bgrt/bgrt.plymouth
+      - mv /usr/share/plymouth/themes/spinner/watermark.png /usr/share/plymouth/themes/spinner/watermark.png.bak
       - dracut -f --regenerate-all
 
   - type: os-release

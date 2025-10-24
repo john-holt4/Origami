@@ -11,37 +11,43 @@ base-image: ghcr.io/ublue-os/cosmic-atomic-main
 image-version: latest # This will track the latest stable release
 
 modules:
-  #
-  # RPM/OSTREE CONFIGURATION
-  #
-  - type: rpm-ostree
+
+  - type: dnf
     repos:
-      # Add the repo for Cloudflare Warp
-      - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
-    keys:
-      # Import the GPG key for the Cloudflare repo
-      - https://pkg.cloudflareclient.com/pubkey.gpg
-    
+      copr:
+        - dejan/lazygit
+        - lihaohong/yazi
+        - alternateved/eza
+      files:
+        - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
+      keys:
+        - https://pkg.cloudflareclient.com/pubkey.gpg
+
     install:
-      # Cloudflare
-      - cloudflare-warp
-      
-      # Your layered tools
-      - btop
-      - fastfetch
-      - podman-compose
-      - java
-      
+      packages:
+        - cloudflare-warp
+        - btop
+        - fastfetch
+        - podman-compose
+        - java
+        - bat
+        - ripgrep
+        - zoxide
+        - lazygit
+        - yazi
+        - eza
+        - hyperfine
+
     remove:
-      # Your list of removed packages
-      - htop
-      - nvtop
-      - firefox
-      - firefox-langpacks
-      - gnome-disk-utility
-      - gnome-system-monitor
-      - ark
-      - ark-libs
+      packages:
+        - htop
+        - nvtop
+        - firefox
+        - firefox-langpacks
+        - gnome-disk-utility
+        - gnome-system-monitor
+        - ark
+        - ark-libs
 
   - type: fonts
     fonts:

@@ -4,7 +4,7 @@
 name: origami
 
 # A short description of your image
-description: "A custom Fedora Cosmic image. Folds in cloudflare-warp, developer tools, and a curated Flatpak suite."
+description: "A custom Fedora Cosmic image. Folds in cloudflare-warp"
 
 # The base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/cosmic-atomic-main
@@ -32,12 +32,18 @@ modules:
       - podman-compose
       - java
       - fzf
+      - ark
+      - ark-libs
       
     remove:
       # Your list of removed packages
       - htop
       - nvtop
-          
+      - firefox
+      - firefox-langpacks
+      - gnome-disk-utility
+      - gnome-system-monitor
+
   #
   # ADD CUSTOM ALIASES & SHELL CONFIG
   #
@@ -53,7 +59,6 @@ modules:
       PRETTY_NAME: Origami 折り紙
       HOME_URL: "https://github.com/john-holt4/Origami"
       BUG_REPORT_URL: "https://github.com/john-holt4/Origami/issues"
-      LOGO: redhat-logo-icon
 
   #
   # SIGNING

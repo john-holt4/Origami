@@ -6,10 +6,5 @@
 alias docker='podman'
 alias docker-compose='podman-compose'
 
-# --- Enable FZF Keybindings & Completion ---
-if [ -f "/usr/share/fzf/key-bindings.bash" ]; then
-  source "/usr/share/fzf/key-bindings.bash"
-fi
-if [ -f "/usr/share/fzf/completion.bash" ]; then
-  source "/usr/share/fzf/completion.bash"
-fi
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --bash)"

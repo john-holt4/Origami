@@ -49,8 +49,11 @@ modules:
   - type: os-release
     properties:
       ID: origami_beta
-      NAME: Oragami
-      PRETTY_NAME: Oragami 折り紙
+      NAME: Origami
+      PRETTY_NAME: Origami 折り紙
+      HOME_URL: "https://github.com/john-holt4/Origami"
+      BUG_REPORT_URL: "https://github.com/john-holt4/Origami/issues"
+      LOGO: redhat-logo-icon
 
   #
   # SIGNING

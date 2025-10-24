@@ -53,8 +53,8 @@ modules:
         destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
 
   - type: script
-    snippets: 
-      - plymouth-set-default-theme spinner
+    snippets:
+      - sed -i 's/UseFirmwareBackground=true/UseFirmwareBackground=false/g' /usr/share/plymouth/themes/bgrt/bgrt.plymouth
       - dracut -f --regenerate-all
 
   - type: os-release

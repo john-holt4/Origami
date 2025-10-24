@@ -35,7 +35,7 @@ modules:
       
     remove:
       # Your list of removed packages
-      - arc
+      - ark
       - htop
       - nvtop
           

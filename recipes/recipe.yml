@@ -68,7 +68,7 @@ modules:
 
   - type: script
     snippets:
-      - sed -i 's/WatermarkVerticalAlignment=.*/WatermarkVerticalAlignment=2/g' /usr/share/plymouth/themes/bgrt/bgrt.plymouth
+      - ln -sf /usr/share/origami/origami.png /usr/share/plymouth/themes/spinner/watermark.png
       - rm -f /etc/profile.d/colorls.sh /etc/profile.d/colorls.csh
   - type: os-release
     properties:

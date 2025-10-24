@@ -62,7 +62,6 @@ modules:
   - type: script
     snippets:
       - sed -i 's/WatermarkVerticalAlignment=.*/WatermarkVerticalAlignment=2/g' /usr/share/plymouth/themes/bgrt/bgrt.plymouth
-      - dracut -f --regenerate-all
 
   - type: os-release
     properties:
@@ -71,6 +70,8 @@ modules:
       PRETTY_NAME: Origami 折り紙
       HOME_URL: "https://github.com/john-holt4/Origami"
       BUG_REPORT_URL: "https://github.com/john-holt4/Origami/issues"
+
+  - type: initramfs
 
   #
   # SIGNING

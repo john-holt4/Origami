@@ -69,6 +69,7 @@ modules:
   - type: script
     snippets:
       - ln -sf /usr/share/origami/origami.png /usr/share/plymouth/themes/spinner/watermark.png
+      - glib-compile-schemas /usr/share/glib-2.0/schemas/
       - rm -f /etc/profile.d/colorls.sh /etc/profile.d/colorls.csh
   - type: os-release
     properties:

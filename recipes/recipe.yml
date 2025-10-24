@@ -18,6 +18,7 @@ modules:
         - dejan/lazygit
         - lihaohong/yazi
         - alternateved/eza
+        - atim/starship
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -37,6 +38,7 @@ modules:
         - yazi
         - eza
         - hyperfine
+        - starship
 
     remove:
       packages:

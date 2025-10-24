@@ -21,6 +21,8 @@ eval "$(fzf --bash)"
 
 eval "$(zoxide init bash)"
 
+eval "$(starship init bash)"
+
 #
 # Nag user to use 'fd' instead of 'find'
 #

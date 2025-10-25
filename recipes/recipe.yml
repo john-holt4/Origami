@@ -54,7 +54,7 @@ modules:
         repo:
           name: cosmic
           title: COSMIC
-          url: https://apt.pop-os.org/cosmic-repo/cosmic.flatpakrepo
+          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
         install:
           - co.uk.cappsy.CosmicAppletLogoMenu
           - io.github.cosmic_utils.sysinfo-applet
@@ -78,7 +78,6 @@ modules:
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme
-      - sudo sed -i '/\[Timer\]/a OnActiveSec=30s' /usr/lib/systemd/user/user-flatpak-setup.timer
 
   - type: systemd
     user:

@@ -50,10 +50,6 @@ modules:
   - type: default-flatpaks
     configurations:
       - scope: user
-        repo:
-          title: Flathub
-
-      - scope: user
         notify: false
         repo:
           name: cosmic

@@ -9,6 +9,7 @@ image-version: latest
 modules:
 
   - type: dnf
+    cleanup: true
     repos:
       copr:
         - dejan/lazygit
@@ -37,6 +38,7 @@ modules:
         - starship
 
     remove:
+      auto-remove: false
       packages:
         - htop
         - nvtop
@@ -46,18 +48,7 @@ modules:
         - gnome-system-monitor
         - ark
         - ark-libs
-
-  - type: default-flatpaks
-    configurations:
-      - scope: user
-        notify: false
-        repo:
-          name: cosmic
-          title: COSMIC
-          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
-        install:
-          - co.uk.cappsy.CosmicAppletLogoMenu
-          - io.github.cosmic_utils.sysinfo-applet
+        - cosmic-player
 
   - type: fonts
     fonts:
@@ -78,12 +69,8 @@ modules:
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme
-      - sudo sed -i '/\[Service\]/a ExecStopPost=/bin/sh -c '\''if [ "$SERVICE_RESULT" = "success" ]; then /usr/bin/pkill cosmic-panel; fi'\''' /usr/lib/systemd/user/user-flatpak-setup.service
-
-  - type: systemd
-    user:
-      enabled:
-        - user-flatpak-setup.timer
+      - flatpak remote-add --system --if-not-exists cosmic https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+      - flatpak install --system --noninteractive cosmic co.uk.cappsy.CosmicAppletLogoMenu io.github.cosmic_utils.sysinfo-applet
 
   - type: os-release
     properties:

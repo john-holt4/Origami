@@ -49,19 +49,16 @@ modules:
 
   - type: default-flatpaks
     configurations:
-
       - scope: user
         repo:
           title: Flathub
-      - notify: false
 
       - scope: user
+        notify: false
         repo:
           name: cosmic
           title: COSMIC
           url: https://apt.pop-os.org/cosmic-repo/cosmic.flatpakrepo
-      - notify: false
-
         install:
           - co.uk.cappsy.CosmicAppletLogoMenu
           - io.github.cosmic_utils.sysinfo-applet

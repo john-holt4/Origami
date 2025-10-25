@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # This file is automatically loaded by your shell
+unalias ls > /dev/null 2>&1 || true # Ignore errors if alias doesn't exist
+unalias ll > /dev/null 2>&1 || true # Ignore errors if alias doesn't exist
+unalias l. > /dev/null 2>&1 || true # Ignore errors if alias doesn't exist
 
 # --- Podman/Docker Aliases ---
 alias docker='podman'

@@ -78,6 +78,7 @@ modules:
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme
+      - sudo sed -i '/\[Service\]/a ExecStopPost=/bin/sh -c '\''if [ "$SERVICE_RESULT" = "success" ]; then /usr/bin/pkill cosmic-panel; fi'\''' /usr/lib/systemd/user/user-flatpak-setup.service
 
   - type: systemd
     user:

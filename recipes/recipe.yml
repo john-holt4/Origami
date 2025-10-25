@@ -38,7 +38,7 @@ modules:
         - starship
 
     remove:
-      auto-remove: false
+      auto-remove: true
       packages:
         - htop
         - nvtop

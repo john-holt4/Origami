@@ -1,15 +1,11 @@
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-#
-# Name of your image
+
 name: origami
 
-# A short description of your image
 description: "A custom Fedora Cosmic image. Folds in cloudflare-warp"
 
-# The base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/cosmic-atomic-main
-image-version: latest # This will track the latest stable release
-
+image-version: latest
 modules:
 
   - type: dnf
@@ -51,6 +47,22 @@ modules:
         - ark
         - ark-libs
 
+  - type: default-flatpaks
+    configurations:
+
+      - scope: user
+        repo:
+          title: Flathub
+
+      - scope: user
+        repo:
+          name: cosmic
+          title: COSMIC
+          url: https://apt.pop-os.org/cosmic-repo/cosmic.flatpakrepo
+        install:
+          - co.uk.cappsy.CosmicAppletLogoMenu
+          - io.github.cosmic_utils.sysinfo-applet
+
   - type: fonts
     fonts:
       nerd-fonts:
@@ -58,19 +70,15 @@ modules:
       google-fonts:
         - Inter
 
-  #
-  # ADD CUSTOM ALIASES & SHELL CONFIG
-  #
   - type: files
     files:
       - source: system
-        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
+        destination: /
 
   - type: script
     snippets:
-      - ln -sf /usr/share/origami/watermark.png /usr/share/plymouth/themes/spinner/watermark.png
       - glib-compile-schemas /usr/share/glib-2.0/schemas/
-      - rm -f /etc/profile.d/colorls.sh /etc/profile.d/colorls.csh
+      - rm -f /etc/profile.d/colorls.sh
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme
@@ -84,7 +92,4 @@ modules:
 
   - type: initramfs
 
-  #
-  # SIGNING
-  #
   - type: signing

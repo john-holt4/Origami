@@ -9,8 +9,8 @@ image-version: latest
 modules:
 
   - type: dnf
-    cleanup: true
     repos:
+      cleanup: true
       copr:
         - dejan/lazygit
         - lihaohong/yazi

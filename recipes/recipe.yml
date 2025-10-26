@@ -16,6 +16,7 @@ modules:
         - lihaohong/yazi
         - alternateved/eza
         - atim/starship
+        - dejan/rpms
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -36,6 +37,9 @@ modules:
         - eza
         - hyperfine
         - starship
+        - cbonsai
+        - cmatrix
+        - tty-clock
 
     remove:
       auto-remove: true

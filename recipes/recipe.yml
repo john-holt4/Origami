@@ -72,7 +72,7 @@ modules:
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme
-      - cat /tmp/files/skel-append.sh >> /etc/skel/.bashrc
+      - cat /tmp/files/scripts/skel-append.sh >> /etc/skel/.bashrc
 
   - type: os-release
     properties:

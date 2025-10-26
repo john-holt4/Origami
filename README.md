@@ -23,9 +23,9 @@ Origami (折り紙) is the Japanese art of paper folding, symbolizing transforma
 To rebase an existing Fedora Atomic installation:
 
 ```sh
-rpm-ostree rebase ostree-unverified-registry:ghcr.io/john-holt4/origami:latest
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/john-holt4/origami-linux:latest
 systemctl reboot
-rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami:latest
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami-linux:latest
 systemctl reboot
 ```
 
@@ -36,7 +36,7 @@ The `latest` tag always points to the newest build, but your Fedora version is c
 Images are signed with [Sigstore](https://www.sigstore.dev/) and [cosign](https://github.com/sigstore/cosign). Download `cosign.pub` and verify with:
 
 ```sh
-cosign verify --key cosign.pub ghcr.io/john-holt4/origami:latest
+cosign verify --key cosign.pub ghcr.io/john-holt4/origami-linux:latest
 ```
 
 ## Philosophy

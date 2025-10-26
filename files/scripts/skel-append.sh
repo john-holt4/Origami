@@ -9,7 +9,6 @@ alias cat='bat'
 # eza aliases
 alias l='eza --icons'
 alias ls='eza --icons'                 # A "safe" override for interactive use
-alias ll='eza -l --icons'              # long list
 alias la='eza -la --icons'             # long list, all files
 alias lt='eza --tree --level=2 --icons'  # tree view
 

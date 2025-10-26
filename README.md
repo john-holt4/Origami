@@ -1,4 +1,5 @@
 # Origami Linux &nbsp; [![bluebuild build badge](https://github.com/john-holt4/origami/actions/workflows/build.yml/badge.svg)](https://github.com/john-holt4/origami/actions/workflows/build.yml)
+<img width="150" height="150" alt="origami-logo" src="https://github.com/user-attachments/assets/03793c82-9000-496d-9cae-16a153b62e32" />
 
 Origami is a modern Linux distribution that blends the elegance of Japanese philosophy with the power of open-source technology. Built on Fedora Atomic with Universal Blue, Origami is designed for creators, tinkerers, and anyone who values a beautiful, efficient, and customizable Cosmic desktop experience.
 

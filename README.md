@@ -1,43 +1,44 @@
-# Origami &nbsp; [![bluebuild build badge](https://github.com/john-holt4/origami/actions/workflows/build.yml/badge.svg)](https://github.com/john-holt4/origami/actions/workflows/build.yml)
+# Origami Linux &nbsp; [![bluebuild build badge](https://github.com/john-holt4/origami/actions/workflows/build.yml/badge.svg)](https://github.com/john-holt4/origami/actions/workflows/build.yml)
 
-See the [BlueBuild docs](https://blue-build.org/how-to/setup/) for quick setup instructions for setting up your own repository based on this template.
+Origami is a modern Linux distribution that blends the elegance of Japanese philosophy with the power of open-source technology. Built on Fedora Atomic with Universal Blue, Origami is designed for creators, tinkerers, and anyone who values a beautiful, efficient, and customizable Cosmic desktop experience.
 
-After setup, it is recommended you update this README to describe your custom image.
+## Why "Origami"?
+
+Origami (折り紙) is the Japanese art of paper folding, symbolizing transformation, creativity, and simplicity. Just as a single sheet of paper can be folded into infinite forms, Origami Linux lets you shape your system to fit your unique workflow. Inspired by the philosophy of *kaizen* (continuous improvement) and *wabi-sabi* (finding beauty in simplicity), Origami encourages users to craft their digital space with intention and artistry.
+
+## Features
+
+- **Fedora Atomic Base built with Universal Blue**: Cutting-edge, atomic updates for stability and security.
+- **Cloudflare Warp**: Integrated for fast, private, and secure networking.
+- **Beautiful Defaults**: WhiteSur icon theme, custom wallpapers, and fastfetch ASCII config.
+- **Powerful Tools**: Includes btop, fastfetch, podman-compose, bat, ripgrep, zoxide, lazygit, yazi, eza, hyperfine, starship, cbonsai, cmatrix, tty-clock, and more.
+- **Smart Aliases**: Enhanced shell experience with modern replacements for classic commands.
+- **Fonts**: JetBrainsMono (Nerd Font) and Inter (Google Font) for a crisp, readable interface.
+- **Minimal Bloat**: Removes unnecessary packages for a lean system.
 
 ## Installation
 
-> [!WARNING]  
-> [This is an experimental feature](https://www.fedoraproject.org/wiki/Changes/OstreeNativeContainerStable), try at your own discretion.
+> **Warning:** Origami is experimental. Use at your own discretion.
 
-To rebase an existing atomic Fedora installation to the latest build:
+To rebase an existing Fedora Atomic installation:
 
-- First rebase to the unsigned image, to get the proper signing keys and policies installed:
-  ```
-  rpm-ostree rebase ostree-unverified-registry:ghcr.io/john-holt4/origami:latest
-  ```
-- Reboot to complete the rebase:
-  ```
-  systemctl reboot
-  ```
-- Then rebase to the signed image, like so:
-  ```
-  rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami:latest
-  ```
-- Reboot again to complete the installation
-  ```
-  systemctl reboot
-  ```
+```sh
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/john-holt4/origami:latest
+systemctl reboot
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami:latest
+systemctl reboot
+```
 
-The `latest` tag will automatically point to the latest build. That build will still always use the Fedora version specified in `recipe.yml`, so you won't get accidentally updated to the next major version.
-
-## ISO
-
-If build on Fedora Atomic, you can generate an offline ISO with the instructions available [here](https://blue-build.org/learn/universal-blue/#fresh-install-from-an-iso). These ISOs cannot unfortunately be distributed on GitHub for free due to large sizes, so for public projects something else has to be used for hosting.
+The `latest` tag always points to the newest build, but your Fedora version is controlled by `recipe.yml`.
 
 ## Verification
 
-These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo and running the following command:
+Images are signed with [Sigstore](https://www.sigstore.dev/) and [cosign](https://github.com/sigstore/cosign). Download `cosign.pub` and verify with:
 
-```bash
-cosign verify --key cosign.pub ghcr.io/john-holt4/origami
+```sh
+cosign verify --key cosign.pub ghcr.io/john-holt4/origami:latest
 ```
+
+## Philosophy
+
+Origami Linux is more than an OS—it's a canvas for digital creativity. Inspired by the Japanese principles of *kaizen* (continuous improvement) and *wabi-sabi* (embracing imperfection), Origami invites you to fold, shape, and refine your computing experience. Every detail, from the ASCII art to the curated tools, reflects a commitment to beauty, simplicity, and user empowerment.

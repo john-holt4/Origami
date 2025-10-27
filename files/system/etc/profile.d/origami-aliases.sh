@@ -5,18 +5,29 @@ if [ -n "$DISTROBOX_ENTER_PATH" ]; then
     return
 fi
 
-# --- eza functions (will override any alias) ---
-l() {
-    command eza --icons "$@"
-}
+# --- eza Aliases (no conflicts) ---
+# These are fine as simple aliases.
+alias l='eza --icons'
+alias la='eza -la --icons'
+alias lt='eza --tree --level=2 --icons'
+
+# --- eza Functions (to override colorls.sh) ---
+# We must unalias them first to avoid a parsing syntax error
+unalias ls 2>/dev/null
 ls() {
     command eza --icons "$@"
 }
-la() {
-    command eza -la --icons "$@"
+
+unalias ll 2>/dev/null
+ll() {
+    # This specifically overrides 'ls -l --color=auto'
+    command eza -l --icons "$@"
 }
-lt() {
-    command eza --tree --level=2 --icons "$@"
+
+unalias l. 2>/dev/null
+l.() {
+    # This overrides 'ls -d .* --color=auto'
+    command eza -d ".*" --icons "$@"
 }
 
 # --- Podman/Docker Aliases ---

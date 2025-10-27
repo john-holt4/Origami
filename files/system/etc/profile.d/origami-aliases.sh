@@ -32,7 +32,7 @@ alias cat='bat'
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
 
-eval "$(zoxide init bash)"
+eval "$(zoxide init bash --cmd cd)"
 
 eval "$(starship init bash)"
 

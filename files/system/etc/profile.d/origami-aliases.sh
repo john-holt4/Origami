@@ -7,7 +7,6 @@ fi
 
 # --- eza Aliases (no conflicts) ---
 # These are fine as simple aliases.
-alias l='eza --icons'
 alias la='eza -la --icons'
 alias lt='eza --tree --level=2 --icons'
 
@@ -22,12 +21,6 @@ unalias ll 2>/dev/null
 ll() {
     # This specifically overrides 'ls -l --color=auto'
     command eza -l --icons "$@"
-}
-
-unalias l. 2>/dev/null
-l.() {
-    # This overrides 'ls -d .* --color=auto'
-    command eza -d ".*" --icons "$@"
 }
 
 # --- Podman/Docker Aliases ---

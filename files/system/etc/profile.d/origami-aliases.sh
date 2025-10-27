@@ -1,21 +1,29 @@
+#!/usr/bin/env bash
+
 # Skip aliases and overrides when inside Distrobox
 if [ -n "$DISTROBOX_ENTER_PATH" ]; then
     return
 fi
 
-alias fastfetch='fastfetch -l /usr/share/fastfetch/presets/origami/origami-ascii.txt --logo-color-1 blue -c /usr/share/fastfetch/presets/origami/origami-fastfetch.jsonc'
+# --- eza functions (will override any alias) ---
+l() {
+    command eza --icons "$@"
+}
+ls() {
+    command eza --icons "$@"
+}
+la() {
+    command eza -la --icons "$@"
+}
+lt() {
+    command eza --tree --level=2 --icons "$@"
+}
 
 # --- Podman/Docker Aliases ---
 alias docker='podman'
 alias docker-compose='podman-compose'
 
 alias cat='bat'
-
-# eza aliases
-alias l='eza --icons'
-alias ls='eza --icons'                 # A "safe" override for interactive use
-alias la='eza -la --icons'             # long list, all files
-alias lt='eza --tree --level=2 --icons'  # tree view
 
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"

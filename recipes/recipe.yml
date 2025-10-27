@@ -41,6 +41,7 @@ modules:
         - cmatrix
         - tty-clock
         - sudo-rs
+        - uutils-coreutils
 
     remove:
       auto-remove: true

@@ -1,3 +1,8 @@
+# Skip aliases and overrides when inside Distrobox
+if [ -n "$DISTROBOX_ENTER_PATH" ]; then
+    return
+fi
+
 alias fastfetch='fastfetch -l /usr/share/fastfetch/presets/origami/origami-ascii.txt --logo-color-1 blue -c /usr/share/fastfetch/presets/origami/origami-fastfetch.jsonc'
 
 # --- Podman/Docker Aliases ---

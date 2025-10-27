@@ -29,6 +29,9 @@ alias docker-compose='podman-compose'
 
 alias cat='bat'
 
+alias sudo='sudo-rs'
+alias su='su-rs'
+
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
 

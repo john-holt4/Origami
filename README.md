@@ -4,11 +4,29 @@
 
 Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic with Universal Blue, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece.
 
+> Experimental project: expect rapid iteration – back up your data.
+
+---
+## 📚 Table of Contents
+1. [Why "Origami"](#why-origami)
+2. [Key Features](#-key-features)
+3. [Quick Start](#-quick-start)
+4. [Installation](#-installation)
+5. [Image Verification](#-image-verification)
+6. [What's Included (Tools)](#-whats-included)
+7. [Development Workflow](#-development-workflow)
+8. [System Management (ujust)](#system-management-with-ujust)
+9. [Getting Started](#-getting-started)
+10. [Philosophy](#-philosophy)
+11. [Contributing](#-contributing)
+12. [License](#-license)
+---
+
 ## Why "Origami"?
 
 Origami (折り紙) is the Japanese art of paper folding, symbolizing transformation, creativity, and simplicity. Just as a single sheet of paper can be folded into infinite forms, Origami Linux lets you shape your system to fit your unique workflow. Inspired by the philosophy of *kaizen* (continuous improvement) and *wabi-sabi* (finding beauty in simplicity), Origami encourages users to craft their digital space with intention and artistry.
 
-## ✨ Features
+## ✨ Key Features
 
 ### 🏗️ **Foundation**
 - **Cosmic Desktop Environment**: Modern, beautiful, and efficient desktop experience
@@ -49,6 +67,69 @@ Origami (折り紙) is the Japanese art of paper folding, symbolizing transforma
 - **No GUI Applications**: Origami doesn't install GUI applications by default, giving you complete control over your software selection
 - **User Choice**: Install your preferred applications from the Cosmic Store after enabling software repositories in the store's settings
 - **Lean System**: Focused on essential tools and beautiful defaults
+
+<details>
+<summary><strong>🔍 Expand Full Feature Bullet List</strong></summary>
+
+#### Foundation
+* Cosmic Desktop Environment: Modern, beautiful, and efficient desktop experience
+* Fedora Atomic Base: Built with Universal Blue for cutting-edge, atomic updates and stability
+* Container-First: Podman integration with Docker compatibility aliases
+* Secure by Design: Signed images with Sigstore and cosign verification
+
+#### Networking & Privacy
+* Cloudflare Warp: Integrated for fast, private, and secure networking
+
+#### Visual Design
+* WhiteSur Icon Theme: Beautiful, modern iconography automatically installed
+* Custom Wallpapers: Curated Origami-themed backgrounds
+* Custom ASCII Art: Personalized fastfetch configuration with Origami branding
+* Premium Fonts: JetBrainsMono Nerd Font and Inter Google Font for optimal readability
+
+#### Modern Command-Line Tools
+* Enhanced File Management: `eza` (modern ls), `yazi` (terminal file manager), `bat` (syntax-highlighted cat)
+* System Monitoring: `btop` (modern htop), `fastfetch` (system info with custom ASCII)
+* Development Tools: `lazygit` (Git UI), `ripgrep` (fast grep), `hyperfine` (benchmarking)
+* Navigation & Search: `zoxide` (smart cd), `starship` (beautiful prompt)
+* Rust-Powered Core: `sudo-rs`, `uutils-coreutils` for modern, safe system utilities
+* Fun Extras: `cbonsai`, `cmatrix`, `tty-clock` for terminal aesthetics
+
+#### Intelligent Shell Experience
+* Smart Aliases (modern replacements)
+* Distrobox-Aware (aliases auto-disable in containers)
+* Helpful Hints (fd vs find, rg vs grep)
+* FZF integration
+
+#### Development & Container Workflow
+* Distrobox Integration
+* ujust Commands
+* Isolated Development
+
+#### Minimal & Clean
+* Removed Bloat (Firefox, GNOME utilities, etc.)
+* No GUI Applications by default
+* User Choice via Cosmic Store
+* Lean System
+</details>
+
+## 🚀 Quick Start
+```bash
+# Rebase (unsigned then signed)
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/john-holt4/origami-linux:latest && systemctl reboot
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami-linux:latest && systemctl reboot
+
+# Verify image signature
+curl -O https://raw.githubusercontent.com/john-holt4/Origami/main/cosign.pub
+cosign verify --key cosign.pub ghcr.io/john-holt4/origami-linux:latest
+
+# Create a development container
+distrobox create --name dev-fedora --image fedora:latest
+distrobox enter dev-fedora
+
+# Update & maintain
+ujust update
+ujust clean-system
+```
 
 ## 🚀 Installation
 
@@ -148,7 +229,10 @@ sudo apt update && sudo apt install nodejs npm python3-pip
 
 ### System Management with ujust
 
-Origami includes **ujust** recipes for common system management tasks:
+Origami includes **ujust** recipes for common system management tasks (collapsible reference below for readability):
+
+<details>
+<summary><strong>📜 ujust Command Reference (click to expand)</strong></summary>
 
 ```bash
 # System Updates & Maintenance
@@ -187,10 +271,12 @@ ujust toggle-user-motd    # Toggle terminal welcome message
 ```
 
 **Why ujust?**
-- 📋 **Comprehensive Management**: Everything from updates to hardware configuration
-- 🔧 **System Maintenance**: Automated cleanup and maintenance workflows
-- 🎯 **User-Friendly**: No need to remember complex rpm-ostree or systemctl commands
-- 🔄 **Consistent Experience**: Standardized interface across all Universal Blue images
+* 📋 Comprehensive Management (updates, hardware, containers)
+* 🔧 Automated Maintenance workflows
+* 🎯 User-Friendly (no long rpm-ostree/systemctl commands)
+* 🔄 Consistent Universal Blue experience
+
+</details>
 
 
 ## 🌟 **Getting Started**

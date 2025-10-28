@@ -233,13 +233,6 @@ ujust setup-luks-tpm-unlock  # For encrypted drives
 ujust clean-system
 ```
 
-### 4. **Explore the Tools**
-- Try `eza` instead of `ls`
-- Use `bat` instead of `cat`
-- Navigate with `zoxide` (`cd` is aliased)
-- Monitor system with `btop`
-- Check system info with `fastfetch`
-
 ## 🧘 Philosophy
 
 Origami Linux is more than an operating system—it's a digital *dojo* for creativity and productivity. Inspired by the Japanese principles of:

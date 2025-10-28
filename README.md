@@ -39,7 +39,12 @@ Origami (折り紙) is the Japanese art of paper folding, symbolizing transforma
 - **Helpful Hints**: Gentle nudges to use modern alternatives (fd instead of find, rg instead of grep)
 - **Fuzzy Everything**: FZF integration for enhanced command-line productivity
 
-### 🗑️ **Minimal & Clean**
+### � **Development & Container Workflow**
+- **Distrobox Integration**: Seamless container-based development environments
+- **ujust Commands**: System management and configuration utilities
+- **Isolated Development**: Keep your host system clean while developing
+
+### �🗑️ **Minimal & Clean**
 - **Removed Bloat**: Firefox, GNOME utilities, and other unnecessary packages removed
 - **Lean System**: Focused on essential tools and beautiful defaults
 
@@ -104,6 +109,76 @@ cosign verify --key cosign.pub ghcr.io/john-holt4/origami-linux:latest
 - **Fonts**: JetBrainsMono Nerd Font and Inter for optimal readability
 - **Networking**: Cloudflare Warp for enhanced privacy and performance
 
+## 🏗️ **Development Workflow**
+
+### Container-Based Development with Distrobox
+
+Origami follows the **atomic desktop philosophy** where the host system remains immutable and clean. For development work, use **Distrobox** to create isolated, mutable containers:
+
+```bash
+# Create a development container (Ubuntu example)
+distrobox create --name dev-ubuntu --image ubuntu:latest
+
+# Enter the container
+distrobox enter dev-ubuntu
+
+# Install development tools inside the container
+# Your Origami aliases are automatically disabled here
+sudo apt update && sudo apt install nodejs npm python3-pip
+```
+
+**Benefits:**
+- 🛡️ **Host Protection**: Keep your base system clean and stable
+- 🔄 **Multiple Environments**: Run different distros for different projects
+- 🧹 **Easy Cleanup**: Remove containers without affecting the host
+- ⚡ **Native Performance**: Full access to host hardware and home directory
+
+### System Management with ujust
+
+Origami includes **ujust** recipes for common system management tasks:
+
+```bash
+# System Updates & Maintenance
+ujust update                 # Update system, flatpaks, and containers all at once
+ujust clean-system          # Clean up old podman images, volumes, flatpaks and rpm-ostree content
+ujust update-firmware       # Update device firmware
+ujust toggle-updates        # Turn automatic updates on or off
+
+# Hardware Configuration
+ujust configure-nvidia      # Configure NVIDIA drivers (if applicable)
+ujust configure-nvidia-optimus  # Configure NVIDIA Optimus for laptops
+ujust enroll-secure-boot-key     # Enroll driver signing keys for secure boot
+ujust toggle-nvk            # Switch between NVIDIA image and NVK
+
+# Development Containers
+ujust distrobox-new         # Create a new custom distrobox container
+ujust distrobox-assemble    # Create distroboxes from a defined manifest
+ujust setup-distrobox-app   # Install specialized application containers
+
+# System Information & Diagnostics
+ujust device-info           # Gather device info for troubleshooting
+ujust bios-info            # Show BIOS information
+ujust logs-this-boot       # Show all messages from current boot
+ujust logs-last-boot       # Show all messages from last boot
+ujust check-idle-power-draw # Measure system power consumption
+
+# Security & Encryption
+ujust setup-luks-tpm-unlock    # Enable automatic LUKS unlock via TPM
+ujust remove-luks-tpm-unlock   # Disable automatic LUKS unlock via TPM
+
+# Additional Utilities
+ujust bios                 # Boot into BIOS/UEFI screen
+ujust changelogs          # Show system changelogs
+ujust install-resolve     # Install DaVinci Resolve video editor
+ujust toggle-user-motd    # Toggle terminal welcome message
+```
+
+**Why ujust?**
+- 📋 **Comprehensive Management**: Everything from updates to hardware configuration
+- 🔧 **System Maintenance**: Automated cleanup and maintenance workflows
+- 🎯 **User-Friendly**: No need to remember complex rpm-ostree or systemctl commands
+- 🔄 **Consistent Experience**: Standardized interface across all Universal Blue images
+
 ## 🛠️ Project Structure
 
 ```
@@ -129,6 +204,41 @@ Origami/
     └── workflows/
         └── build.yml          # Automated daily builds
 ```
+
+## 🌟 **Getting Started**
+
+### 1. **Install Origami** 
+Follow the installation instructions above to rebase your system.
+
+### 2. **Set Up Development Environment**
+```bash
+# Create your preferred development container
+distrobox create --name mydev --image fedora:latest
+distrobox enter mydev
+
+# Or use ujust for quick setup
+ujust setup-development
+```
+
+### 3. **Configure Your System**
+```bash
+# Update everything at once
+ujust update
+
+# Configure hardware (if needed)
+ujust configure-nvidia       # For NVIDIA users
+ujust setup-luks-tpm-unlock  # For encrypted drives
+
+# Clean up system
+ujust clean-system
+```
+
+### 4. **Explore the Tools**
+- Try `eza` instead of `ls`
+- Use `bat` instead of `cat`
+- Navigate with `zoxide` (`cd` is aliased)
+- Monitor system with `btop`
+- Check system info with `fastfetch`
 
 ## 🧘 Philosophy
 

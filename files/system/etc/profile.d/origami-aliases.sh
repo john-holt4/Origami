@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-export PATH="/usr/libexec/uutils-coreutils:$PATH"
-
 # Skip aliases and overrides when inside Distrobox
 if [ -n "$DISTROBOX_ENTER_PATH" ]; then
     return

@@ -68,6 +68,17 @@ systemctl reboot
 
 The `latest` tag always points to the newest build. Your Fedora version is controlled by the base image specified in `recipe.yml`.
 
+### Download ISO Image
+
+For new installations, you can download the Origami ISO image:
+
+**[📥 Download Origami ISO](https://origami.dpdns.org/origami.iso)**
+
+> **⚠️ Important Caveats:**
+> - **NVIDIA Support**: This is the first ISO release and currently **only works on non-NVIDIA machines**. An NVIDIA-compatible image is coming soon.
+> - **Early Release**: This is the inaugural ISO build. Please [report any bugs or issues](https://github.com/john-holt4/Origami/issues) you encounter to help us improve.
+> - **Testing Phase**: As this is experimental software, please backup your data before installation.
+
 ## 🔐 Image Verification
 
 All Origami images are signed with [Sigstore](https://www.sigstore.dev/) and [cosign](https://github.com/sigstore/cosign) for security and authenticity.

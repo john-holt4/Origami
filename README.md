@@ -282,7 +282,7 @@ ujust toggle-user-motd    # Toggle terminal welcome message
 ## 🌟 **Getting Started**
 
 ### 1. **Install Origami** 
-Follow the installation instructions above to rebase your system.
+Follow the installation instructions above.
 
 ### 2. **Set Up Development Environment**
 ```bash

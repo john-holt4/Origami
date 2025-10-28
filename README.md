@@ -190,31 +190,6 @@ ujust toggle-user-motd    # Toggle terminal welcome message
 - 🎯 **User-Friendly**: No need to remember complex rpm-ostree or systemctl commands
 - 🔄 **Consistent Experience**: Standardized interface across all Universal Blue images
 
-## 🛠️ Project Structure
-
-```
-Origami/
-├── recipes/
-│   └── recipe.yml              # Main build configuration
-├── files/
-│   ├── scripts/
-│   │   └── example.sh          # Build-time scripts
-│   └── system/
-│       ├── etc/
-│       │   └── profile.d/
-│       │       └── origami-aliases.sh  # Shell aliases and functions
-│       └── usr/
-│           └── share/
-│               ├── backgrounds/        # Custom wallpapers
-│               ├── fastfetch/         # Custom ASCII and config
-│               ├── glib-2.0/          # Desktop environment settings
-│               ├── pixmaps/           # Custom icons
-│               └── plymouth/          # Boot splash themes
-├── modules/                    # Custom build modules
-└── .github/
-    └── workflows/
-        └── build.yml          # Automated daily builds
-```
 
 ## 🌟 **Getting Started**
 
@@ -235,10 +210,6 @@ ujust setup-development
 ```bash
 # Update everything at once
 ujust update
-
-# Configure hardware (if needed)
-ujust configure-nvidia       # For NVIDIA users
-ujust setup-luks-tpm-unlock  # For encrypted drives
 
 # Clean up system
 ujust clean-system

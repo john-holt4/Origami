@@ -46,6 +46,8 @@ Origami (折り紙) is the Japanese art of paper folding, symbolizing transforma
 
 ### 🗑️ **Minimal & Clean**
 - **Removed Bloat**: Firefox, GNOME utilities, and other unnecessary packages removed
+- **No GUI Applications**: Origami doesn't install GUI applications by default, giving you complete control over your software selection
+- **User Choice**: Install your preferred applications from the Cosmic Store after enabling software repositories in the store's settings
 - **Lean System**: Focused on essential tools and beautiful defaults
 
 ## 🚀 Installation

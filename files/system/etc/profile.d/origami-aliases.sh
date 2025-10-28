@@ -5,6 +5,8 @@ if [ -n "$DISTROBOX_ENTER_PATH" ]; then
     return
 fi
 
+alias fastfetch='fastfetch -l /usr/share/fastfetch/presets/origami/origami-ascii.txt --logo-color-1 blue -c /usr/share/fastfetch/presets/origami/origami-fastfetch.jsonc'
+
 # --- eza Aliases (no conflicts) ---
 # These are fine as simple aliases.
 alias la='eza -la --icons'

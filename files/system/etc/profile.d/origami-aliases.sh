@@ -43,7 +43,7 @@ eval "$(zoxide init bash --cmd cd)"
 # Using Rust-based coreutils.
 # 'ls' and 'cat' are intentionally omitted
 # to keep this file's 'eza' and 'bat' aliases.
-alias [='uu_['
+#alias [='uu_['
 alias b2sum='uu_b2sum'
 alias b3sum='uu_b3sum'
 alias base32='uu_base32'

@@ -39,12 +39,12 @@ Origami (折り紙) is the Japanese art of paper folding, symbolizing transforma
 - **Helpful Hints**: Gentle nudges to use modern alternatives (fd instead of find, rg instead of grep)
 - **Fuzzy Everything**: FZF integration for enhanced command-line productivity
 
-### � **Development & Container Workflow**
+### 💻 **Development & Container Workflow**
 - **Distrobox Integration**: Seamless container-based development environments
 - **ujust Commands**: System management and configuration utilities
 - **Isolated Development**: Keep your host system clean while developing
 
-### �🗑️ **Minimal & Clean**
+### 🗑️ **Minimal & Clean**
 - **Removed Bloat**: Firefox, GNOME utilities, and other unnecessary packages removed
 - **Lean System**: Focused on essential tools and beautiful defaults
 

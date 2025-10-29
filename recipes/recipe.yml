@@ -24,6 +24,7 @@ modules:
 
     install:
       packages:
+        - '@cosmic-desktop-environment'
         - cloudflare-warp
         - btop
         - fastfetch
@@ -42,7 +43,6 @@ modules:
         - tty-clock
         - sudo-rs
         - uutils-coreutils
-        - '@cosmic-desktop-environment'
 
     remove:
       auto-remove: true

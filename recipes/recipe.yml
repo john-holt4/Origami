@@ -44,11 +44,6 @@ modules:
         - sudo-rs
         - uutils-coreutils
 
-    remove:
-      auto-remove: true
-      packages:
-        [] # No packages currently removed; add items here if base image starts including unwanted defaults.
-
   - type: fonts
     fonts:
       nerd-fonts:

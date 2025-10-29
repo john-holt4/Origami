@@ -58,17 +58,16 @@ modules:
 
   - type: default-flatpaks
     configurations:
+      - notify: false
       - scope: user
+        repo:
+          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+          name: cosmic
+          title: COSMIC
         repo:
           name: flathub
           title: Flathub
           url: https://dl.flathub.org/repo/flathub.flatpakrepo
-
-      - scope: user
-        repo:
-          name: cosmic
-          title: COSMIC
-          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
 
   - type: fonts
     fonts:

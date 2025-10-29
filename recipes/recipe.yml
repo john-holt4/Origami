@@ -17,7 +17,6 @@ modules:
         - alternateved/eza
         - atim/starship
         - dejan/rpms
-        - ryanabx/cosmic-epoch
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -25,7 +24,31 @@ modules:
 
     install:
       packages:
-        - cosmic-desktop
+        - cosmic-app-library
+        - cosmic-applets
+        - cosmic-bg
+        - cosmic-comp
+        - cosmic-edit
+        - cosmic-files
+        - cosmic-greeter
+        - cosmic-icon-theme
+        - cosmic-idle
+        - cosmic-initial-setup
+        - cosmic-launcher
+        - cosmic-notifications
+        - cosmic-osd
+        - cosmic-panel
+        - cosmic-randr
+        - cosmic-screenshot
+        - cosmic-session
+        - cosmic-settings
+        - cosmic-settings-daemon
+        - cosmic-store
+        - cosmic-term
+        - cosmic-wallpapers
+        - cosmic-workspaces
+        - pop-launcher
+        - xdg-desktop-portal-cosmic
         - cloudflare-warp
         - btop
         - fastfetch

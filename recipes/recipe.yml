@@ -47,15 +47,7 @@ modules:
     remove:
       auto-remove: true
       packages:
-        #- htop
-        #- nvtop
-        #- firefox
-        #- firefox-langpacks
-        #- gnome-disk-utility
-        #- gnome-system-monitor
-        #- ark
-        #- ark-libs
-        #- cosmic-player
+        [] # No packages currently removed; add items here if base image starts including unwanted defaults.
 
   - type: fonts
     fonts:

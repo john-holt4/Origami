@@ -12,6 +12,9 @@ alias fastfetch='fastfetch -l /usr/share/fastfetch/presets/origami/origami-ascii
 alias la='eza -la --icons'
 alias lt='eza --tree --level=2 --icons'
 
+alias update='ujust update'
+alias update-firmware='ujust update-firmware'
+
 # --- eza Functions (to override colorls.sh) ---
 # We must unalias them first to avoid a parsing syntax error
 unalias ls 2>/dev/null

@@ -17,6 +17,7 @@ modules:
         - alternateved/eza
         - atim/starship
         - dejan/rpms
+        - ryanabx/cosmic-epoch
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -24,7 +25,7 @@ modules:
 
     install:
       packages:
-        - '@cosmic-desktop-environment'
+        - cosmic-desktop
         - cloudflare-warp
         - btop
         - fastfetch
@@ -75,10 +76,6 @@ modules:
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme
-      - grep -E '^greetd:' /usr/etc/passwd | sudo tee -a /etc/passwd
-      - grep -E '^cosmic-greeter:' /usr/etc/passwd | sudo tee -a /etc/passwd
-      - grep -E '^greetd:' /usr/etc/group | sudo tee -a /etc/group
-      - grep -E '^cosmic-greeter:' /usr/etc/group | sudo tee -a /etc/group
 
   - type: os-release
     properties:

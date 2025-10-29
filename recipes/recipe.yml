@@ -56,6 +56,20 @@ modules:
         - ark-libs
         - cosmic-player
 
+  - type: default-flatpaks
+    configurations:
+      - scope: user
+        repo:
+          name: flathub
+          title: Flathub
+          url: https://dl.flathub.org/repo/flathub.flatpakrepo
+
+      - scope: user
+        repo:
+          name: cosmic
+          title: COSMIC
+          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+
   - type: fonts
     fonts:
       nerd-fonts:

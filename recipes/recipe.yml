@@ -71,15 +71,10 @@ modules:
     #remove:
       #auto-remove: true
       #packages:
-        #- htop
-        #- nvtop
-        #- firefox
-        #- firefox-langpacks
-        #- gnome-disk-utility
-        #- gnome-system-monitor
-        #- ark
-        #- ark-libs
-        #- cosmic-player
+        - htop
+        - nvtop
+        - firefox
+        - firefox-langpacks
 
   - type: fonts
     fonts:

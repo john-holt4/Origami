@@ -68,9 +68,9 @@ modules:
         - sudo-rs
         - uutils-coreutils
 
-    #remove:
-      #auto-remove: true
-      #packages:
+    remove:
+      auto-remove: true
+      packages:
         - htop
         - nvtop
         - firefox

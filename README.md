@@ -128,33 +128,7 @@ ujust distrobox-new
 
 ### System Management with ujust
 
-<details>
-<summary><strong>📜 Common ujust Commands (click to expand)</strong></summary>
-
-```bash
-# System Maintenance
-ujust update                    # Update system, flatpaks, and containers
-ujust clean-system             # Clean up old images and packages
-ujust update-firmware          # Update device firmware
-
-# Development
-ujust distrobox-new            # Create a new container
-ujust setup-distrobox-app      # Install application containers
-
-# Hardware & Drivers
-ujust configure-nvidia         # Configure NVIDIA drivers
-ujust configure-nvidia-optimus # Configure NVIDIA Optimus for laptops
-ujust enroll-secure-boot-key   # Enroll driver signing keys
-
-# Networking
-ujust toggle-cloudflare-warp   # Enable/disable Cloudflare Warp VPN
-
-# Diagnostics
-ujust device-info             # Gather device info for troubleshooting
-ujust logs-this-boot          # Show current boot messages
-ujust check-idle-power-draw   # Measure system power consumption
-```
-</details>
+Origami includes **ujust** recipes for common system management tasks like updates, hardware configuration, development containers, and diagnostics. Run `ujust` to see all available commands.
 
 ## 🧘 Philosophy
 

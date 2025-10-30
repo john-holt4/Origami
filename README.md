@@ -38,7 +38,7 @@ Origami (折り紙) is the Japanese art of paper folding, symbolizing transforma
 - Smart aliases with distrobox-aware functionality
 - FZF integration for fuzzy searching
 
-**�️ Development Ready**
+**🧑‍💻 Development Ready**
 - Distrobox integration for isolated development environments
 - ujust commands for system management
 - Cloudflare Warp for enhanced networking
@@ -99,6 +99,7 @@ cosign verify --key cosign.pub ghcr.io/john-holt4/origami-linux:latest
 - **Containers**: Podman with Docker-compatible aliases  
 - **Terminal**: Starship prompt with beautiful display
 - **File Management**: Yazi terminal file manager
+- **Networking**: Cloudflare Warp for fast, private, and secure internet connectivity
 - **Fun**: `cbonsai`, `cmatrix`, `tty-clock` for terminal aesthetics
 
 ## 🏗️ Development Workflow
@@ -144,6 +145,9 @@ ujust setup-distrobox-app      # Install application containers
 ujust configure-nvidia         # Configure NVIDIA drivers
 ujust configure-nvidia-optimus # Configure NVIDIA Optimus for laptops
 ujust enroll-secure-boot-key   # Enroll driver signing keys
+
+# Networking
+ujust toggle-cloudflare-warp   # Enable/disable Cloudflare Warp VPN
 
 # Diagnostics
 ujust device-info             # Gather device info for troubleshooting

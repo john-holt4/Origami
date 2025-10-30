@@ -90,7 +90,6 @@ modules:
 
   - type: script
     snippets:
-      - glib-compile-schemas /usr/share/glib-2.0/schemas/
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme

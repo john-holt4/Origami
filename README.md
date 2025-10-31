@@ -33,7 +33,7 @@ Origami (折り紙) is the Japanese art of paper folding, symbolizing transforma
 - Custom ASCII art and fastfetch configuration
 
 **⚡ Modern Tools**
-- Enhanced command-line: `eza`, `bat`, `zoxide`, `btop`, `ripgrep`, `lazygit`
+- Enhanced command-line: `eza`, `bat`, `zoxide`, `btop`, `ripgrep`, `lazygit`, `axel`, `aria2c`
 - Rust-powered utilities: `sudo-rs`, `uutils-coreutils`
 - Smart aliases with distrobox-aware functionality
 - FZF integration for fuzzy searching
@@ -62,12 +62,22 @@ systemctl reboot
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami-linux:latest
 systemctl reboot
 ```
+For Nvidia Support
+
+```bash
+# Rebase to Origami (unsigned first, then signed)
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/john-holt4/origami-linux-nvidia:latest
+systemctl reboot
+
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami-linux-nvidia:latest
+systemctl reboot
+```
 
 ### ISO Download
 
 **[📥 Download Origami ISO](https://origami.dpdns.org/origami.iso)**
 
-> **Note**: First ISO release - currently works on non-NVIDIA machines only. NVIDIA support coming soon.
+**[📥 Download Origami Nvidia ISO](https://origami.dpdns.org/origami-nvidia.iso)**
 
 ### Image Verification
 
@@ -100,6 +110,7 @@ cosign verify --key cosign.pub ghcr.io/john-holt4/origami-linux:latest
 - **Terminal**: Starship prompt with beautiful display
 - **File Management**: Yazi terminal file manager
 - **Networking**: Cloudflare Warp for fast, private, and secure internet connectivity
+- **Downloading**: `axel` & `aria2` for accelerted file downloading.
 - **Fun**: `cbonsai`, `cmatrix`, `tty-clock` for terminal aesthetics
 
 ## 🏗️ Development Workflow
@@ -126,7 +137,11 @@ ujust distrobox-new
 - 🧹 Easy cleanup without affecting host
 - ⚡ Native performance with full hardware access
 
-### System Management with ujust
+### System Management
+
+Update the system with `update`
+
+Update device firmware with `update-firmware`
 
 Origami includes **ujust** recipes for common system management tasks like updates, hardware configuration, development containers, and diagnostics. Run `ujust` to see all available commands.
 

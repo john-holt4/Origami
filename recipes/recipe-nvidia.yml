@@ -96,6 +96,7 @@ modules:
 
   - type: akmods
     nvidia-driver: nvidia
+    install: []
 
   - type: os-release
     properties:

@@ -95,6 +95,7 @@ modules:
       - rm -rf /tmp/WhiteSur-icon-theme
 
   - type: akmods
+    base: asus
     install:
       - nvidia
 

@@ -53,7 +53,8 @@ modules:
         - btop
         - fastfetch
         - podman-compose
-        - java
+        - axel
+        - aria2c
         - bat
         - ripgrep
         - zoxide

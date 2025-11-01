@@ -55,6 +55,7 @@ modules:
         - podman-compose
         - axel
         - aria2c
+        - cava
         - bat
         - ripgrep
         - zoxide

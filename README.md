@@ -1,6 +1,6 @@
 # <img height="55" alt="Origami Logo" src="https://github.com/user-attachments/assets/c04f71a0-a283-4007-8381-05437b00f15a" /> Origami Linux &nbsp; [![bluebuild build badge](https://github.com/john-holt4/origami/actions/workflows/build.yml/badge.svg)](https://github.com/john-holt4/origami/actions/workflows/build.yml)
 
-<img width="2028" height="1188" alt="Origami Screenshot" src="https://github.com/user-attachments/assets/8fd9a5e5-67a5-4f13-b221-bd7c1d38268e" />
+<img width="1662" height="935" alt="image" src="https://github.com/user-attachments/assets/2578225b-e290-4def-9789-2683d74986ac" />
 
 Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic with Universal Blue, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment.
 

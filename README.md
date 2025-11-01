@@ -111,7 +111,7 @@ cosign verify --key cosign.pub ghcr.io/john-holt4/origami-linux:latest
 - **File Management**: Yazi terminal file manager
 - **Networking**: Cloudflare Warp for fast, private, and secure internet connectivity
 - **Downloading**: `axel` & `aria2` for accelerated file downloading.
-- **Fun**: `cbonsai`, `cmatrix`, `tty-clock` for terminal aesthetics
+- **Fun**: `cbonsai`, `cmatrix`, `tty-clock`, `cava` for terminal aesthetics
 
 ## 🏗️ Development Workflow
 

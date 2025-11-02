@@ -140,7 +140,9 @@ alias yes='uu_yes'
 
 # --- Nag user to use 'fd' instead of 'find' ---
 function find {
-    printf '💡 Tip: Try using "fd" next time for a simpler and faster search.\n' >&2
+    if [ -t 2 ]; then
+        printf '💡 Tip: Try using "fd" next time for a simpler and faster search.\n' >&2
+    fi
     command find "$@"
 }
 

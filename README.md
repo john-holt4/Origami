@@ -89,6 +89,8 @@ systemctl reboot
 
 All images are signed with [Sigstore](https://www.sigstore.dev/) for security:
 
+This proves the image was built and signed by our official build system and hasn't been tampered with.
+
 ```bash
 # Download public key and verify
 curl -O https://raw.githubusercontent.com/john-holt4/Origami-Linux/main/cosign.pub

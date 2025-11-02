@@ -115,9 +115,10 @@ cosign verify --key cosign.pub ghcr.io/john-holt4/origami-linux:latest
 - **Containers**: Podman with Docker-compatible aliases  
 - **Terminal**: Starship prompt with beautiful display
 - **File Management**: Yazi terminal file manager
+- **Text Editor**: Helix text editor run with `hx`
 - **Networking**: Cloudflare Warp for fast, private, and secure internet connectivity
 - **Downloading**: `axel` & `aria2` for accelerated file downloading.
-- **Fun**: `cbonsai`, `cmatrix`, `tty-clock`, `cava` for terminal aesthetics
+- **Fun**: `cbonsai`, `cmatrix`, `tty-clock`, `cava`, `lolcat`, `cowsay`, `figlet` for terminal aesthetics
 
 ## 🏗️ Development Workflow
 

@@ -14,30 +14,41 @@ concurrency:
   # only run one build at a time
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
+
 jobs:
-  bluebuild:
-    name: Build Custom Image
+  # Job 1: Build the base image first
+  build-base:
+    name: Build Base Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       id-token: write
-    strategy:
-      fail-fast: false # stop GH from cancelling all matrix builds if one fails
-      matrix:
-        recipe:
-          # !! Add your recipes here
-          - recipe.yml
-          - recipe-nvidia.yml
     steps:
-      # the build is fully handled by the reusable github action
       - name: Build Custom Image
         uses: blue-build/github-action@v1.9
         with:
-          recipe: ${{ matrix.recipe }}
+          recipe: recipe.yml # <-- Only builds the base recipe
           cosign_private_key: ${{ secrets.SIGNING_SECRET }}
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
+          maximize_build_space: true
 
-          # enabled by default, disable if your image is small and you want faster builds
+  # Job 2: Build the NVIDIA image AFTER the base image is done
+  build-nvidia:
+    name: Build NVIDIA Image
+    runs-on: ubuntu-latest
+    needs: build-base # <-- This is the crucial line!
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Build Custom Image
+        uses: blue-build/github-action@v1.9
+        with:
+          recipe: recipe-nvidia.yml # <-- Only builds the NVIDIA recipe
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          pr_event_number: ${{ github.event.number }}
           maximize_build_space: true

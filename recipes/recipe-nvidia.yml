@@ -2,112 +2,18 @@
 
 name: origami-linux-nvidia
 
-description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic with Universal Blue, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece."
-
-base-image: ghcr.io/ublue-os/base-main
+# This pulls the base image we built in the first job
+base-image: ghcr.io/john-holt4/origami-linux
 image-version: latest
+
 modules:
-
-  - type: dnf
-    repos:
-      cleanup: true
-      copr:
-        - dejan/lazygit
-        - lihaohong/yazi
-        - alternateved/eza
-        - atim/starship
-        - dejan/rpms
-      files:
-        - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
-      keys:
-        - https://pkg.cloudflareclient.com/pubkey.gpg
-
-    install:
-      packages:
-        - cosmic-app-library
-        - cosmic-applets
-        - cosmic-bg
-        - cosmic-comp
-        - cosmic-edit
-        - cosmic-files
-        - cosmic-greeter
-        - cosmic-icon-theme
-        - cosmic-idle
-        - cosmic-initial-setup
-        - cosmic-launcher
-        - cosmic-notifications
-        - cosmic-osd
-        - cosmic-panel
-        - cosmic-randr
-        - cosmic-screenshot
-        - cosmic-session
-        - cosmic-settings
-        - cosmic-settings-daemon
-        - cosmic-store
-        - cosmic-term
-        - cosmic-wallpapers
-        - cosmic-workspaces
-        - pop-launcher
-        - xdg-desktop-portal-cosmic
-        - cloudflare-warp
-        - btop
-        - fastfetch
-        - podman-compose
-        - axel
-        - aria2c
-        - cava
-        - bat
-        - ripgrep
-        - zoxide
-        - lazygit
-        - yazi
-        - eza
-        - hyperfine
-        - starship
-        - cbonsai
-        - cmatrix
-        - tty-clock
-        - sudo-rs
-        - uutils-coreutils
-
-    remove:
-      auto-remove: true
-      packages:
-        - htop
-        - nvtop
-        - firefox
-        - firefox-langpacks
-
-  - type: fonts
-    fonts:
-      nerd-fonts:
-        - JetBrainsMono
-      google-fonts:
-        - Inter
-
-  - type: files
-    files:
-      - source: system
-        destination: /
-
-  - type: script
-    snippets:
-      - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
-      - /tmp/WhiteSur-icon-theme/install.sh -b -a
-      - rm -rf /tmp/WhiteSur-icon-theme
-
+  # 1. Add the NVIDIA drivers
   - type: akmods
     nvidia-driver: nvidia
     install: []
 
-  - type: os-release
-    properties:
-      ID: origami_Linux
-      NAME: Origami Linux
-      PRETTY_NAME: Origami 折り紙
-      HOME_URL: "https://github.com/john-holt4/Origami"
-      BUG_REPORT_URL: "https://github.com/john-holt4/Origami/issues"
-
+  # 2. Rebuild the initramfs to include the new drivers
   - type: initramfs
 
+  # 3. Sign this new NVIDIA-specific image
   - type: signing

@@ -1,6 +1,6 @@
 # <img height="55" alt="Origami Logo" src="https://github.com/user-attachments/assets/c04f71a0-a283-4007-8381-05437b00f15a" /> Origami Linux &nbsp; [![bluebuild build badge](https://github.com/john-holt4/origami/actions/workflows/build.yml/badge.svg)](https://github.com/john-holt4/origami/actions/workflows/build.yml)
 
-Discord - [Join Here](https://discord.com/channels/1434166231274885313/1434166233816764529)
+Discord - [Join Here](https://discord.gg/CEvU5QqW)
 
 <img width="1662" height="935" alt="image" src="https://github.com/user-attachments/assets/2578225b-e290-4def-9789-2683d74986ac" />
 

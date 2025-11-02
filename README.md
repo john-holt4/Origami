@@ -167,7 +167,7 @@ Origami thrives on community contributions:
 - 🔧 Contribute code
 - 🎨 Create themes or wallpapers
 
-Visit our [GitHub repository](https://github.com/john-holt4/Origami) to get started.
+Visit our [Discord](https://discord.com/channels/1434166231274885313/1434166233816764529) to get started.
 
 ## 📄 License
 

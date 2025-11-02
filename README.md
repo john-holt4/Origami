@@ -77,9 +77,9 @@ systemctl reboot
 
 ### ISO Download
 
-**[📥 Download Origami ISO](https://origami.dpdns.org/origami.iso)**
+**[📥 Download Origami ISO](https://pub-afd20e8301164bff9e6ceb0ebc38f6d6.r2.dev/origami.iso)**
 
-**[📥 Download Origami Nvidia ISO](https://origami.dpdns.org/origami-nvidia.iso)**
+**[📥 Download Origami Nvidia ISO](https://pub-afd20e8301164bff9e6ceb0ebc38f6d6.r2.dev/origami-nvidia.iso)**
 
 ### Image Verification
 

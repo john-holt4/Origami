@@ -1,0 +1,128 @@
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+
+name: origami-linux-cachyos
+
+description: "EXPERIMENTAL: Origami Linux with CachyOS kernel for enhanced performance. This is a testing variant - use at your own risk."
+
+base-image: ghcr.io/ublue-os/base-main
+image-version: latest
+modules:
+
+  - type: dnf
+    repos:
+      cleanup: true
+      copr:
+        - dejan/lazygit
+        - lihaohong/yazi
+        - alternateved/eza
+        - atim/starship
+        - dejan/rpms
+        - bieszczaders/kernel-cachyos
+        - bieszczaders/kernel-cachyos-addons
+      files:
+        - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
+      keys:
+        - https://pkg.cloudflareclient.com/pubkey.gpg
+
+    install:
+      packages:
+        - cosmic-app-library
+        - cosmic-applets
+        - cosmic-bg
+        - cosmic-comp
+        - cosmic-edit
+        - cosmic-files
+        - cosmic-greeter
+        - cosmic-icon-theme
+        - cosmic-idle
+        - cosmic-initial-setup
+        - cosmic-launcher
+        - cosmic-notifications
+        - cosmic-osd
+        - cosmic-panel
+        - cosmic-randr
+        - cosmic-screenshot
+        - cosmic-session
+        - cosmic-settings
+        - cosmic-settings-daemon
+        - cosmic-store
+        - cosmic-term
+        - cosmic-wallpapers
+        - cosmic-workspaces
+        - pop-launcher
+        - xdg-desktop-portal-cosmic
+        - cloudflare-warp
+        - helix
+        - cowsay
+        - lolcat
+        - figlet
+        - btop
+        - fastfetch
+        - podman-compose
+        - axel
+        - aria2c
+        - cava
+        - bat
+        - ripgrep
+        - zoxide
+        - lazygit
+        - yazi
+        - eza
+        - hyperfine
+        - starship
+        - cbonsai
+        - cmatrix
+        - tty-clock
+        - sudo-rs
+        - uutils-coreutils
+        - kernel-cachyos
+        - kernel-cachyos-devel-matched
+        - cachyos-settings
+        - scx-scheds
+        - ananicy-cpp
+
+    remove:
+      auto-remove: true
+      packages:
+        - htop
+        - nvtop
+        - firefox
+        - firefox-langpacks
+        - kernel
+        - kernel-core
+        - kernel-modules
+        - kernel-modules-core
+        - kernel-modules-extra
+        - zram-generator-defaults
+
+  - type: fonts
+    fonts:
+      nerd-fonts:
+        - JetBrainsMono
+      google-fonts:
+        - Inter
+
+  - type: files
+    files:
+      - source: system
+        destination: /
+
+  - type: script
+    snippets:
+      - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
+      - /tmp/WhiteSur-icon-theme/install.sh -b -a
+      - rm -rf /tmp/WhiteSur-icon-theme
+      - chmod +x /usr/share/origami/scripts/configure-cachyos-kernel.sh
+      - /usr/share/origami/scripts/configure-cachyos-kernel.sh
+
+  - type: os-release
+    properties:
+      ID: origami_Linux_CachyOS
+      NAME: Origami Linux (CachyOS)
+      PRETTY_NAME: Origami 折り紙 (CachyOS Experimental)
+      HOME_URL: "https://github.com/john-holt4/Origami"
+      BUG_REPORT_URL: "https://github.com/john-holt4/Origami/issues"
+
+  - type: initramfs
+
+  - type: signing

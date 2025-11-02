@@ -81,6 +81,10 @@ systemctl reboot
 
 **[📥 Download Origami Nvidia ISO](https://pub-afd20e8301164bff9e6ceb0ebc38f6d6.r2.dev/origami-nvidia.iso)**
 
+### Getting started
+
+[Getting Started Guide](https://github.com/john-holt4/Origami-Linux/wiki/Getting-Started)
+
 ### Image Verification
 
 All images are signed with [Sigstore](https://www.sigstore.dev/) for security:

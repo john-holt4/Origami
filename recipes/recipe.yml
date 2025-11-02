@@ -50,6 +50,10 @@ modules:
         - pop-launcher
         - xdg-desktop-portal-cosmic
         - cloudflare-warp
+        - helix
+        - cowsay
+        - lolcat
+        - figlet
         - btop
         - fastfetch
         - podman-compose

@@ -96,7 +96,6 @@ modules:
 
   - type: script
     snippets:
-      - echo "origami" > /etc/hostname
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme

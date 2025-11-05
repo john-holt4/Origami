@@ -107,6 +107,7 @@ modules:
       PRETTY_NAME: Origami 折り紙
       HOME_URL: "https://github.com/john-holt4/Origami"
       BUG_REPORT_URL: "https://github.com/john-holt4/Origami/issues"
+      DEFAULT_HOSTNAME: origami
 
   - type: initramfs
 

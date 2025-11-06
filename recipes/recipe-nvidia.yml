@@ -9,11 +9,15 @@ base-image: ghcr.io/john-holt4/origami-linux
 image-version: latest
 
 modules:
+# 1. Add this module to remove the conflicting 64-bit package
+  - type: dnf
+    remove:
+      packages:
+        - mesa-vulkan-drivers
   # 1. Add the NVIDIA drivers
   - type: akmods
     nvidia-driver: nvidia
     install: []
-    multilib: false
 
   # 2. Rebuild the initramfs to include the new drivers
   - type: initramfs

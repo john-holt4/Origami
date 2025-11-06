@@ -13,6 +13,7 @@ modules:
   - type: akmods
     nvidia-driver: nvidia
     install: []
+    multilib: false
 
   # 2. Rebuild the initramfs to include the new drivers
   - type: initramfs

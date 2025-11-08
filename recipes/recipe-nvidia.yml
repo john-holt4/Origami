@@ -4,20 +4,25 @@ name: origami-linux-nvidia
 
 description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic with Universal Blue, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece."
 
+# === THIS IS THE LINE WE FIXED ===
+# It now points to your GitLab registry, not GitHub
 base-image: registry.gitlab.com/origami-linux/images/origami-linux
 image-version: latest
 
 modules:
+  # 1. Add this module to remove the conflicting 64-bit package
+  - type: dnf
+    remove:
+      packages:
+        - mesa-vulkan-drivers
 
-  # 1. Add the NVIDIA drivers.
-
+  # 2. Add the NVIDIA drivers
   - type: akmods
     nvidia-driver: nvidia
     install: []
-    multilib: false
 
-  # 2. Rebuild the initramfs to include the new drivers
+  # 3. Rebuild the initramfs to include the new drivers
   - type: initramfs
 
-  # 3. Sign this new NVIDIA-specific image
+  # 4. Sign this new NVIDIA-specific image
   - type: signing

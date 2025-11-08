@@ -5,51 +5,41 @@ stages:
 
 # 2. A template to share settings for all build jobs
 .build-template:
-  # Use the official BlueBuild image from the docs
   image:
     name: ghcr.io/blue-build/cli
-    entrypoint: [""] # Required by the docs
-
-  # Use the Docker-in-Docker service
+    entrypoint: [""]
   services:
     - docker:dind
-
-  # Use the secure TLS variables from the docs
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
-
-  # Only run jobs on the main branch (or other branches you push)
   rules:
     - if: $CI_COMMIT_BRANCH
-
   before_script:
-    # 1. Log in to GitLab's own registry
     - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    
-    # 2. Download your signing key from "Secure Files"
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-    
-    # 3. Wait for the Docker service to be ready
     - sleep 5
 
 # 3. Job 1: Build the base image
 build-base:
   extends: .build-template
   stage: build-base
+  tags:
+    - saas-linux-small-amd64
   script:
-    - bluebuild --verbose build --push ./recipes/recipe.yml
+    - bluebuild build --push ./recipes/recipe.yml
 
 # 4. Job 2: Build the NVIDIA image
 build-nvidia:
   extends: .build-template
   stage: build-nvidia
+  tags:
+    - saas-linux-medium-amd64
   script:
-    - bluebuild --verbose build --push ./recipes/recipe-nvidia.yml
-  
-  # This is critical: It makes this job wait for 'build-base' to finish
+    # We'll keep verbose just in case
+    - bluebuild build --verbose --push ./recipes/recipe-nvidia.yml
   needs:
     - build-base

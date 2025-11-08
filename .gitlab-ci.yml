@@ -41,14 +41,14 @@ build-base:
   extends: .build-template
   stage: build-base
   script:
-    - bluebuild build --push ./recipes/recipe.yml
+    - bluebuild build --verbose --push ./recipes/recipe.yml
 
 # 4. Job 2: Build the NVIDIA image
 build-nvidia:
   extends: .build-template
   stage: build-nvidia
   script:
-    - bluebuild build --push ./recipes/recipe-nvidia.yml
+    - bluebuild build --verbose --push ./recipes/recipe-nvidia.yml
   
   # This is critical: It makes this job wait for 'build-base' to finish
   needs:

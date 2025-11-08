@@ -1,0 +1,45 @@
+# 1. Define the build stages in the correct order
+stages:
+  - build-base
+  - build-nvidia
+
+# 2. This is a template to share settings between jobs
+.build-template:
+  services:
+    - docker:24-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  image: docker:24
+  # Only run jobs on the main branch
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+# 3. Job 1: Build the base image
+build-base:
+  extends: .build-template
+  stage: build-base
+  script:
+    # Log in to GitLab's own registry
+    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    # Install BlueBuild CLI
+    - apk add --no-cache nodejs npm
+    - npm install -g @blue-build/cli
+    # Build the specific recipe from the 'recipes' folder
+    - bluebuild build recipes/recipe.yml
+
+# 4. Job 2: Build the NVIDIA image
+build-nvidia:
+  extends: .build-template
+  stage: build-nvidia
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - apk add --no-cache nodejs npm
+    - npm install -g @blue-build/cli
+    # Build the specific nvidia recipe
+    - bluebuild build recipes/recipe-nvidia.yml
+  # This is critical: It tells GitLab to *only* run this job
+  # AFTER the 'build-base' job has succeeded.
+  needs:
+    - build-base

@@ -10,19 +10,13 @@ base-image: registry.gitlab.com/origami-linux/images/origami
 image-version: latest
 
 modules:
-  # 1. Add this module to remove the conflicting 64-bit package
-  - type: dnf
-    remove:
-      packages:
-        - mesa-vulkan-drivers
-
-  # 2. Add the NVIDIA drivers
+  # Add the NVIDIA drivers
   - type: akmods
     nvidia-driver: nvidia
     install: []
 
-  # 3. Rebuild the initramfs to include the new drivers
+  # Rebuild the initramfs to include the new drivers
   - type: initramfs
 
-  # 4. Sign this new NVIDIA-specific image
+  # Sign this new NVIDIA-specific image
   - type: signing

@@ -1,4 +1,4 @@
-# <img height="55" alt="Origami Logo" src="https://github.com/user-attachments/assets/c04f71a0-a283-4007-8381-05437b00f15a" /> Origami Linux &nbsp;
+# <img height="55" alt="Origami Logo" src="https://github.com/user-attachments/assets/c04f71a0-a283-4007-8381-05437b00f15a" /> Origami Linux
 
 Discord - [Join Here](https://discord.gg/CEvU5QqW)
 
@@ -58,20 +58,20 @@ Origami (折り紙) is the Japanese art of paper folding, symbolizing transforma
 
 ```bash
 # Rebase to Origami (unsigned first, then signed)
-rpm-ostree rebase ostree-unverified-registry:ghcr.io/john-holt4/origami-linux:latest
+rpm-ostree rebase ostree-unverified-registry:registry.gitlab.com/origami-linux/images/origami-linux:latest
 systemctl reboot
 
-rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami-linux:latest
+rpm-ostree rebase ostree-image-signed:docker://registry.gitlab.com/origami-linux/images/origami-linux:latest
 systemctl reboot
 ```
 For Nvidia Support
 
 ```bash
 # Rebase to Origami (unsigned first, then signed)
-rpm-ostree rebase ostree-unverified-registry:ghcr.io/john-holt4/origami-linux-nvidia:latest
+rpm-ostree rebase ostree-unverified-registry:registry.gitlab.com/origami-linux/images/origami-linux-nvidia:latest
 systemctl reboot
 
-rpm-ostree rebase ostree-image-signed:docker://ghcr.io/john-holt4/origami-linux-nvidia:latest
+rpm-ostree rebase ostree-image-signed:docker://registry.gitlab.com/origami-linux/images/origami-linux-nvidia:latest
 systemctl reboot
 ```
 
@@ -93,8 +93,8 @@ This proves the image was built and signed by our official build system and hasn
 
 ```bash
 # Download public key and verify
-curl -O https://raw.githubusercontent.com/john-holt4/Origami-Linux/main/cosign.pub
-cosign verify --key cosign.pub ghcr.io/john-holt4/origami-linux:latest
+curl -O https://gitlab.com/origami-linux/images/-/raw/main/cosign.pub
+cosign verify --key cosign.pub registry.gitlab.com/origami-linux/images/origami-linux:latest
 ```
 
 ## 🎯 What's Included

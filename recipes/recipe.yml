@@ -51,7 +51,6 @@ modules:
         - xdg-desktop-portal-cosmic
         - cloudflare-warp
         - helix
-        - cowsay
         - lolcat
         - figlet
         - btop

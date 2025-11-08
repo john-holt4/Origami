@@ -1,3 +1,22 @@
+workflow:
+  rules:
+    # Rule 1: Run on the daily schedule
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    
+    # Rule 2: Run on push, *unless* the only changes are to markdown files.
+    # This 'changes:compare_to' trick checks what changed against the
+    # previous commit. If the *only* changes are to '**.md' files,
+    # the 'when: never' rule will stop the pipeline.
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - "**/*.md"
+      # 'compare_to' is needed to make 'changes' look at the push
+      compare_to: $CI_COMMIT_BEFORE_SHA 
+      when: never # Do NOT run the pipeline
+      
+    # Rule 3: Run for all other types of pushes
+    - if: $CI_PIPELINE_SOURCE == "push"
+
 # 1. Define the build stages in the correct order
 stages:
   - build-base
@@ -11,12 +30,10 @@ stages:
   services:
     - docker:dind
   variables:
-    DOCKER_HOST: tcp://docker:2376
+    DOCKK_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
-  rules:
-    - if: $CI_COMMIT_BRANCH
   before_script:
     - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
@@ -39,7 +56,7 @@ build-nvidia:
   tags:
     - saas-linux-medium-amd64
   script:
-    # We'll keep verbose just in case
     - bluebuild build --verbose --push ./recipes/recipe-nvidia.yml
+  
   needs:
     - build-base

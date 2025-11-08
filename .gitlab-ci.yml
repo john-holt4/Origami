@@ -1,0 +1,59 @@
+# This block controls *when* a pipeline runs.
+workflow:
+  rules:
+    # Rule 1: Allow scheduled pipelines to run (for your daily build)
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    
+    # Rule 2: Run on push *only if* build-critical files have changed.
+    # This implicitly skips pushes that only change files like README.md,
+    # LICENSE, etc.
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - "recipes/**/*"      # Any change in the recipes folder
+        - "files/**/*"      # Any file in the 'files' folder or its subfolders
+        - ".gitlab-ci.yml"  # The CI file itself
+        - "cosign.pub"      # The public signing key
+
+# 1. Define the build stages in the correct order
+stages:
+  - build-base
+  - build-nvidia
+
+# 2. A template to share settings for all build jobs
+.build-template:
+  image:
+    name: ghcr.io/blue-build/cli
+    entrypoint: [""]
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+    - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
+    - sleep 5
+
+# 3. Job 1: Build the base image
+build-base:
+  extends: .build-template
+  stage: build-base
+  tags:
+    - saas-linux-small-amd64
+  script:
+    - bluebuild build --push ./recipes/recipe.yml
+
+# 4. Job 2: Build the NVIDIA image
+build-nvidia:
+  extends: .build-template
+  stage: build-nvidia
+  tags:
+    - saas-linux-medium-amd64
+  script:
+    - bluebuild build --verbose --push ./recipes/recipe-nvidia.yml
+  
+  needs:
+    - build-base

@@ -1,21 +1,18 @@
+# This block controls *when* a pipeline runs.
 workflow:
   rules:
-    # Rule 1: Run on the daily schedule
+    # Rule 1: Allow scheduled pipelines to run (for your daily build)
     - if: $CI_PIPELINE_SOURCE == "schedule"
     
-    # Rule 2: Run on push, *unless* the only changes are to markdown files.
-    # This 'changes:compare_to' trick checks what changed against the
-    # previous commit. If the *only* changes are to '**.md' files,
-    # the 'when: never' rule will stop the pipeline.
+    # Rule 2: Run on push *only if* build-critical files have changed.
+    # This implicitly skips pushes that only change files like README.md,
+    # LICENSE, etc.
     - if: $CI_PIPELINE_SOURCE == "push"
       changes:
-        - "**/*.md"
-      # 'compare_to' is needed to make 'changes' look at the push
-      compare_to: $CI_COMMIT_BEFORE_SHA 
-      when: never # Do NOT run the pipeline
-      
-    # Rule 3: Run for all other types of pushes
-    - if: $CI_PIPELINE_SOURCE == "push"
+        - "recipes/**/*"      # Any change in the recipes folder
+        - "files/**/*"      # Any file in the 'files' folder or its subfolders
+        - ".gitlab-ci.yml"  # The CI file itself
+        - "cosign.pub"      # The public signing key
 
 # 1. Define the build stages in the correct order
 stages:
@@ -30,7 +27,7 @@ stages:
   services:
     - docker:dind
   variables:
-    DOCKK_HOST: tcp://docker:2376
+    DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client

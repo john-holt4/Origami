@@ -6,7 +6,7 @@ description: "Origami is a next-generation Linux distribution inspired by the ar
 
 # === THIS IS THE LINE WE FIXED ===
 # It now points to your GitLab registry, not GitHub
-base-image: registry.gitlab.com/origami-linux/images/origami-linux
+base-image: registry.gitlab.com/origami-linux/images/origami
 image-version: latest
 
 modules:

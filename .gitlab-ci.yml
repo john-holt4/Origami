@@ -3,43 +3,53 @@ stages:
   - build-base
   - build-nvidia
 
-# 2. This is a template to share settings between jobs
+# 2. A template to share settings for all build jobs
 .build-template:
+  # Use the official BlueBuild image from the docs
+  image:
+    name: ghcr.io/blue-build/cli
+    entrypoint: [""] # Required by the docs
+
+  # Use the Docker-in-Docker service
   services:
-    - docker:24-dind
+    - docker:dind
+
+  # Use the secure TLS variables from the docs
   variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-  image: docker:24
-  # Only run jobs on the main branch
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
+
+  # Only run jobs on the main branch (or other branches you push)
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH
+
+  before_script:
+    # 1. Log in to GitLab's own registry
+    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    
+    # 2. Download your signing key from "Secure Files"
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+    - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
+    
+    # 3. Wait for the Docker service to be ready
+    - sleep 5
 
 # 3. Job 1: Build the base image
 build-base:
   extends: .build-template
   stage: build-base
   script:
-    # Log in to GitLab's own registry
-    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    # Install BlueBuild CLI
-    - apk add --no-cache nodejs npm
-    - npm install -g @blue-build/cli
-    # Build the specific recipe from the 'recipes' folder
-    - bluebuild build recipes/recipe.yml
+    - bluebuild build --push ./recipes/recipe.yml
 
 # 4. Job 2: Build the NVIDIA image
 build-nvidia:
   extends: .build-template
   stage: build-nvidia
   script:
-    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    - apk add --no-cache nodejs npm
-    - npm install -g @blue-build/cli
-    # Build the specific nvidia recipe
-    - bluebuild build recipes/recipe-nvidia.yml
-  # This is critical: It tells GitLab to *only* run this job
-  # AFTER the 'build-base' job has succeeded.
+    - bluebuild build --push ./recipes/recipe-nvidia.yml
+  
+  # This is critical: It makes this job wait for 'build-base' to finish
   needs:
     - build-base

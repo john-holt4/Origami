@@ -1,7 +1,7 @@
+# 1. We only need two stages now
 stages:
   - build   # Build container and push to registry
-  - iso     # Pull container and generate ISO
-  - deploy  # Upload the ISO
+  - iso     # Pull container, generate ISO, and upload to S3
 
 workflow:
   rules:
@@ -23,7 +23,6 @@ workflow:
     - docker:dind
   parallel:
     matrix:
-      # We now include the target image name in the matrix
       - RECIPE: "recipe-base.yml"
         ISO_NAME: "origami-x86_64.iso"
         IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami"
@@ -35,58 +34,49 @@ workflow:
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
+    # Set the S3 endpoint URL for Cloudflare R2
+    S3_ENDPOINT_URL: "https://0041560ce1f22c78111d98dfde401cac.r2.cloudflarestorage.com"
   before_script:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-    
-    # ADDED: Log in to the GitLab registry so we can push and pull images
+    # Log in to the GitLab registry
     - echo "Logging in to $CI_REGISTRY..."
     - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    
     - sleep 5
 
 build-image:
   extends: .bluebuild-job-template
   stage: build
   script:
-    # This command will build and push. We assume your recipe files
-    # are configured to push to the $IMAGE_NAME destination.
-    # The 'docker login' in before_script will allow this to work.
     - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE
 
-generate-iso:
+# 2. This is the new, combined job
+generate_and_upload_iso:
   extends: .bluebuild-job-template
   stage: iso
+  before_script:
+    # We run the template's before_script first
+    - !reference [.bluebuild-job-template, before_script]
+    
+    # 3. Now we install the aws-cli in the bluebuild container
+    - echo "Installing AWS CLI..."
+    # The bluebuild image is Fedora-based, so we must install 'unzip' first
+    - dnf install -y unzip
+    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    - unzip awscliv2.zip
+    - ./aws/install
+    - echo "AWS CLI installed."
+    
   script:
-    # CHANGED: We now build from the 'image' not the 'recipe'
+    # 4. First, generate the ISO
     - echo "Generating $ISO_NAME from image $IMAGE_NAME..."
     - bluebuild generate-iso --iso-name $ISO_NAME image $IMAGE_NAME
-  artifacts:
-    paths:
-      - $ISO_NAME
-    expire_in: 1 hour
-
-# This job doesn't change, but it now uses the expanded matrix
-upload-iso:
-  stage: deploy
-  image: amazon/aws-cli:latest
-  parallel:
-    matrix:
-      - RECIPE: "recipe-base.yml"
-        ISO_NAME: "origami-x86_64.iso"
-        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami"
-      - RECIPE: "recipe-nvidia.yml"
-        ISO_NAME: "origami-nvidia-x86_64.iso"
-        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
-  needs:
-    - job: generate-iso
-      artifacts: true
-  variables:
-    S3_ENDPOINT_URL: "https://0041560ce1f22c78111d98dfde401cac.r2.cloudflarestorage.com"
-  script:
+    
+    # 5. Second, upload it (if the build succeeded)
+    - echo "Uploading $ISO_NAME to $S3_ENDPOINT_URL"
     - export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY
     - export AWS_SECRET_ACCESS_KEY=$S3_SECRET_KEY
-    - echo "Uploading $ISO_NAME to $S3_ENDPOINT_URL"
     - |
       aws s3 cp $ISO_NAME s3://origami-linux/$ISO_NAME \
         --endpoint-url $S3_ENDPOINT_URL
+        

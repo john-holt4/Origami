@@ -8,42 +8,35 @@ workflow:
       when: never
     - if: "$CI_COMMIT_BRANCH"
 
-# 1. Define the build stages in the correct order.
 stages:
   - build
 
-# 2. A template to share settings for all build jobs
-.build-template:
+build-image:
+  stage: build
+  tags:
+  - saas-linux-medium-amd64
   image:
     name: ghcr.io/blue-build/cli
     entrypoint: [""]
   services:
     - docker:dind
+  parallel:
+    matrix:
+      - RECIPE:
+          # Add your recipe files here
+          - recipe-base.yml
+          - recipe-nvidia.yml
   variables:
+    # Setup a secure connection with docker-in-docker service
+    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
   before_script:
+    # Pulls secure files into the build
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-    - sleep 5
-
-# 3. Job 1: Build the base image
-build-base:
-  extends: .build-template
-  stage: build
-  tags:
-    - saas-linux-small-amd64
   script:
-    - bluebuild build --verbose --push ./recipes/recipe-base.yml
-
-# 4. Job 2: Build the NVIDIA image
-build-nvidia:
-  extends: .build-template
-  stage: build
-  tags:
-    - saas-linux-medium-amd64
-  script:
-    - bluebuild build --verbose --push ./recipes/recipe-nvidia.yml
-  
+    - sleep 5 # Wait a bit for the docker-in-docker service to start
+    - bluebuild build --verbose --push ./recipes/$RECIPE

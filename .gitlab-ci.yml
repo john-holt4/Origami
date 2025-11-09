@@ -1,4 +1,9 @@
-# workflow rules are unchanged...
+# 1. Define all stages in order
+stages:
+  - build   # For building the container image
+  - iso     # For generating the ISO (depends on build)
+  - deploy  # For uploading the ISO (depends on iso)
+
 workflow:
   rules:
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
@@ -9,12 +14,8 @@ workflow:
       when: never
     - if: "$CI_COMMIT_BRANCH"
 
-stages:
-  - build
-
-# 1. We update the matrix in the template to include both variables
+# 2. Template is updated to remove 'stage'. Each job will define its own.
 .bluebuild-job-template:
-  stage: build
   tags:
     - saas-linux-2xlarge-amd64
   image:
@@ -24,7 +25,6 @@ stages:
     - docker:dind
   parallel:
     matrix:
-      # Each item in the matrix now defines *both* variables
       - RECIPE: "recipe-base.yml"
         ISO_NAME: "origami-x86_64.iso"
       - RECIPE: "recipe-nvidia.yml"
@@ -37,19 +37,53 @@ stages:
   before_script:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-    - sleep 5 # Wait a bit for the docker-in-docker service to start
+    - sleep 5
 
-# 2. This job extends the template. It will run twice (once for each
-#    matrix entry) and only uses the $RECIPE variable.
+# 3. Job 1: Build the image in the 'build' stage
 build-image:
   extends: .bluebuild-job-template
+  stage: build
   script:
     - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE
 
-# 3. This job also extends the template and will run twice in parallel.
-#    It uses *both* $ISO_NAME and $RECIPE.
+# 4. Job 2: Generate the ISO in the 'iso' stage (runs *after* build stage)
 generate-iso:
   extends: .bluebuild-job-template
+  stage: iso
   script:
-    # We now use the dynamic $ISO_NAME variable from the matrix
     - bluebuild generate-iso --iso-name $ISO_NAME recipe ./recipes/$RECIPE
+  # 5. Add 'artifacts' to save the ISO file for the next stage
+  artifacts:
+    paths:
+      - $ISO_NAME # This saves the file (e.g., origami-x86_64.iso)
+    expire_in: 1 hour
+
+# 6. Job 3: Upload the saved ISO in the 'deploy' stage
+upload-iso:
+  stage: deploy
+  image: amazon/aws-cli:latest # Use the official AWS CLI image
+  # 7. We need the same matrix here to create a matching parallel job
+  parallel:
+    matrix:
+      - RECIPE: "recipe-base.yml"
+        ISO_NAME: "origami-x86_64.iso"
+      - RECIPE: "recipe-nvidia.yml"
+        ISO_NAME: "origami-nvidia-x86_64.iso"
+  # 8. 'needs' connects this job to the matching 'generate-iso' job
+  #    and tells it to download the artifact (the ISO)
+  needs:
+    - job: generate-iso
+      artifacts: true
+  variables:
+    # Set the S3 endpoint URL for Cloudflare R2
+    S3_ENDPOINT_URL: "https://0041560ce1f22c78111d98dfde401cac.r2.cloudflarestorage.com"
+  script:
+    # 9. Use the secure CI/CD variables you created
+    - export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY
+    - export AWS_SECRET_ACCESS_KEY=$S3_SECRET_KEY
+    
+    # 10. Upload the file
+    - echo "Uploading $ISO_NAME to $S3_ENDPOINT_URL"
+    - |
+      aws s3 cp $ISO_NAME s3://origami-linux/$ISO_NAME \
+        --endpoint-url $S3_ENDPOINT_URL

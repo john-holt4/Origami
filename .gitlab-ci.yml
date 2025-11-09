@@ -14,7 +14,7 @@ stages:
 build-image:
   stage: build
   tags:
-  - saas-linux-medium-amd64
+  - saas-linux-large-amd64
   image:
     name: ghcr.io/blue-build/cli
     entrypoint: [""]
@@ -39,4 +39,4 @@ build-image:
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
   script:
     - sleep 5 # Wait a bit for the docker-in-docker service to start
-    - bluebuild build --verbose --push ./recipes/$RECIPE
+    - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE

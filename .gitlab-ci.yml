@@ -8,46 +8,42 @@ workflow:
       when: never
     - if: "$CI_COMMIT_BRANCH"
 
+# 1. Define the build stages in the correct order
 stages:
   - build
 
-# 1. Create a hidden "template" job with all the common configuration
+# 2. A template to share settings for all build jobs
 .build-template:
-  stage: build
   image:
     name: ghcr.io/blue-build/cli
     entrypoint: [""]
   services:
     - docker:dind
   variables:
-    # Setup a secure connection with docker-in-docker service
-    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
   before_script:
-    # Pulls secure files into the build
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-  script:
-    - sleep 5 # Wait a bit for the docker-in-docker service to start
-    # The $RECIPE variable will be provided by each job below
-    - bluebuild build --verbose --push ./recipes/$RECIPE
+    - sleep 5
 
-# 2. Create the job for the "base" recipe
-# It inherits everything from .build-template and runs on the default runner
+# 3. Job 1: Build the base image
 build-base:
   extends: .build-template
-  variables:
-    RECIPE: recipe-base.yml
+  stage: build
+  tags:
+    - saas-linux-small-amd64
+  script:
+    - bluebuild build --verbose --push ./recipes/recipe-base.yml
 
-# 3. Create the job for the "nvidia" recipe
-# It also inherits from .build-template, but adds the 'tags' keyword
-# to force it onto the medium SaaS runner.
+# 4. Job 2: Build the NVIDIA image
 build-nvidia:
   extends: .build-template
-  variables:
-    RECIPE: recipe-nvidia.yml
+  stage: build
   tags:
-    - saas-linux-medium
+    - saas-linux-medium-amd64
+  script:
+    - bluebuild build --verbose --push ./recipes/recipe-nvidia.yml
+  

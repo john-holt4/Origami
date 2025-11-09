@@ -1,3 +1,4 @@
+# workflow rules are unchanged...
 workflow:
   rules:
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
@@ -11,10 +12,11 @@ workflow:
 stages:
   - build
 
-build-image:
+# 1. We update the matrix in the template to include both variables
+.bluebuild-job-template:
   stage: build
   tags:
-  - saas-linux-2xlarge-amd64
+    - saas-linux-2xlarge-amd64
   image:
     name: ghcr.io/blue-build/cli
     entrypoint: [""]
@@ -22,21 +24,32 @@ build-image:
     - docker:dind
   parallel:
     matrix:
-      - RECIPE:
-          # Add your recipe files here
-          - recipe-base.yml
-          - recipe-nvidia.yml
+      # Each item in the matrix now defines *both* variables
+      - RECIPE: "recipe-base.yml"
+        ISO_NAME: "origami-x86_64.iso"
+      - RECIPE: "recipe-nvidia.yml"
+        ISO_NAME: "origami-nvidia-x86_64.iso"
   variables:
-    # Setup a secure connection with docker-in-docker service
-    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
   before_script:
-    # Pulls secure files into the build
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-  script:
     - sleep 5 # Wait a bit for the docker-in-docker service to start
+
+# 2. This job extends the template. It will run twice (once for each
+#    matrix entry) and only uses the $RECIPE variable.
+build-image:
+  extends: .bluebuild-job-template
+  script:
     - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE
+
+# 3. This job also extends the template and will run twice in parallel.
+#    It uses *both* $ISO_NAME and $RECIPE.
+generate-iso:
+  extends: .bluebuild-job-template
+  script:
+    # We now use the dynamic $ISO_NAME variable from the matrix
+    - bluebuild generate-iso --iso-name $ISO_NAME recipe ./recipes/$RECIPE

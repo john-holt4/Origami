@@ -1,11 +1,4 @@
-# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-
-name: origami
-
-description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic with Universal Blue, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece."
-
-base-image: ghcr.io/ublue-os/base-main
-image-version: latest
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
 modules:
 
   - type: dnf
@@ -24,31 +17,7 @@ modules:
 
     install:
       packages:
-        - cosmic-app-library
-        - cosmic-applets
-        - cosmic-bg
-        - cosmic-comp
-        - cosmic-edit
-        - cosmic-files
-        - cosmic-greeter
-        - cosmic-icon-theme
-        - cosmic-idle
-        - cosmic-initial-setup
-        - cosmic-launcher
-        - cosmic-notifications
-        - cosmic-osd
-        - cosmic-panel
-        - cosmic-randr
-        - cosmic-screenshot
-        - cosmic-session
-        - cosmic-settings
-        - cosmic-settings-daemon
-        - cosmic-store
-        - cosmic-term
-        - cosmic-wallpapers
-        - cosmic-workspaces
-        - pop-launcher
-        - xdg-desktop-portal-cosmic
+        - '@cosmic-desktop-environment'
         - cloudflare-warp
         - helix
         - lolcat

@@ -44,7 +44,7 @@ build-base:
   tags:
     - saas-linux-small-amd64
   script:
-    - bluebuild build --push ./recipes/recipe.yml
+    - bluebuild build --verbose --rechunk --push ./recipes/recipe-base.yml
 
 # 4. Job 2: Build the NVIDIA image
 build-nvidia:
@@ -53,7 +53,5 @@ build-nvidia:
   tags:
     - saas-linux-medium-amd64
   script:
-    - bluebuild build --verbose --push ./recipes/recipe-nvidia.yml
+    - bluebuild build --verbose --rechunk --push ./recipes/recipe-nvidia.yml
   
-  needs:
-    - build-base

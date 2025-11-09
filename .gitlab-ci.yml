@@ -16,8 +16,7 @@ workflow:
 
 # 1. Define the build stages in the correct order
 stages:
-  - build-base
-  - build-nvidia
+  - build
 
 # 2. A template to share settings for all build jobs
 .build-template:
@@ -40,7 +39,7 @@ stages:
 # 3. Job 1: Build the base image
 build-base:
   extends: .build-template
-  stage: build-base
+  stage: build
   tags:
     - saas-linux-small-amd64
   script:
@@ -49,7 +48,7 @@ build-base:
 # 4. Job 2: Build the NVIDIA image
 build-nvidia:
   extends: .build-template
-  stage: build-nvidia
+  stage: build
   tags:
     - saas-linux-medium-amd64
   script:

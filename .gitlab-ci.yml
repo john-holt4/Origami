@@ -11,19 +11,14 @@ workflow:
 stages:
   - build
 
-build-image:
+# 1. Create a hidden "template" job with all the common configuration
+.build-template:
   stage: build
   image:
     name: ghcr.io/blue-build/cli
     entrypoint: [""]
   services:
     - docker:dind
-  parallel:
-    matrix:
-      - RECIPE:
-          # Add your recipe files here
-          - recipe-base.yml
-          - recipe-nvidia.yml
   variables:
     # Setup a secure connection with docker-in-docker service
     # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
@@ -37,4 +32,22 @@ build-image:
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
   script:
     - sleep 5 # Wait a bit for the docker-in-docker service to start
+    # The $RECIPE variable will be provided by each job below
     - bluebuild build --verbose --push ./recipes/$RECIPE
+
+# 2. Create the job for the "base" recipe
+# It inherits everything from .build-template and runs on the default runner
+build-base:
+  extends: .build-template
+  variables:
+    RECIPE: recipe-base.yml
+
+# 3. Create the job for the "nvidia" recipe
+# It also inherits from .build-template, but adds the 'tags' keyword
+# to force it onto the medium SaaS runner.
+build-nvidia:
+  extends: .build-template
+  variables:
+    RECIPE: recipe-nvidia.yml
+  tags:
+    - saas-linux-medium

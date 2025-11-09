@@ -1,56 +1,40 @@
-# This block controls *when* a pipeline runs.
 workflow:
   rules:
-    # Rule 1: Allow scheduled pipelines to run (for your daily build)
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    
-    # Rule 2: Run on push *only if* build-critical files have changed.
-    # This implicitly skips pushes that only change files like README.md,
-    # LICENSE, etc.
-    - if: $CI_PIPELINE_SOURCE == "push"
-      changes:
-        - "recipes/**/*"      # Any change in the recipes folder
-        - "files/**/*"      # Any file in the 'files' folder or its subfolders
-        - ".gitlab-ci.yml"  # The CI file itself
-        - "cosign.pub"      # The public signing key
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
+      when: never
+    - if: "$CI_COMMIT_TAG"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
+      when: never
+    - if: "$CI_COMMIT_BRANCH"
 
-# 1. Define the build stages in the correct order
 stages:
   - build
 
-# 2. A template to share settings for all build jobs
-.build-template:
+build-image:
+  stage: build
   image:
     name: ghcr.io/blue-build/cli
     entrypoint: [""]
   services:
     - docker:dind
+  parallel:
+    matrix:
+      - RECIPE:
+          # Add your recipe files here
+          - recipe-base.yml
+          - recipe-nvidia.yml
   variables:
+    # Setup a secure connection with docker-in-docker service
+    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
   before_script:
-    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    # Pulls secure files into the build
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-    - sleep 5
-
-# 3. Job 1: Build the base image
-build-base:
-  extends: .build-template
-  stage: build
-  tags:
-    - saas-linux-small-amd64
   script:
-    - bluebuild build --verbose --rechunk --push ./recipes/recipe-base.yml
-
-# 4. Job 2: Build the NVIDIA image
-build-nvidia:
-  extends: .build-template
-  stage: build
-  tags:
-    - saas-linux-medium-amd64
-  script:
-    - bluebuild build --verbose --rechunk --push ./recipes/recipe-nvidia.yml
-  
+    - sleep 5 # Wait a bit for the docker-in-docker service to start
+    - bluebuild build --verbose --push ./recipes/$RECIPE

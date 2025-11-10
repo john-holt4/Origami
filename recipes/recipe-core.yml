@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
 modules:
-  - from-file: batteries.yml
+
   - type: dnf
     repos:
       cleanup: true
@@ -17,6 +17,31 @@ modules:
 
     install:
       packages:
+        - cosmic-app-library
+        - cosmic-applets
+        - cosmic-bg
+        - cosmic-comp
+        - cosmic-edit
+        - cosmic-files
+        - cosmic-greeter
+        - cosmic-icon-theme
+        - cosmic-idle
+        - cosmic-initial-setup
+        - cosmic-launcher
+        - cosmic-notifications
+        - cosmic-osd
+        - cosmic-panel
+        - cosmic-randr
+        - cosmic-screenshot
+        - cosmic-session
+        - cosmic-settings
+        - cosmic-settings-daemon
+        - cosmic-store
+        - cosmic-term
+        - cosmic-wallpapers
+        - cosmic-workspaces
+        - pop-launcher
+        - xdg-desktop-portal-cosmic
         - cloudflare-warp
         - helix
         - lolcat
@@ -41,6 +66,14 @@ modules:
         - tty-clock
         - sudo-rs
         - uutils-coreutils
+
+    remove:
+      auto-remove: true
+      packages:
+        - htop
+        - nvtop
+        - firefox
+        - firefox-langpacks
 
   - type: fonts
     fonts:

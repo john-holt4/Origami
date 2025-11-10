@@ -12,8 +12,11 @@ alias fastfetch='fastfetch -l /usr/share/fastfetch/presets/origami/origami-ascii
 alias la='eza -la --icons'
 alias lt='eza --tree --level=2 --icons'
 
-alias update='ujust update'
-alias update-firmware='ujust update-firmware'
+# This will run all three commands in sequence, stopping if any one of them fails.
+alias update='rpm-ostree update && flatpak update -y && distrobox upgrade -a'
+
+# This will refresh, get updates, and then apply updates, stopping if any step fails.
+alias update-firmware='fwupdmgr refresh --force && fwupdmgr get-updates && fwupdmgr update'
 
 # --- eza Functions (to override colorls.sh) ---
 # We must unalias them first to avoid a parsing syntax error

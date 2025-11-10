@@ -24,6 +24,7 @@ modules:
 
     install:
       packages:
+        - distrobox
         - cloudflare-warp
         - helix
         - lolcat
@@ -52,8 +53,12 @@ modules:
     remove:
       auto-remove: true
       packages:
-        []
-
+        - cosmic-player
+        - firefox
+        - firefox-la
+  
+  - type: default-flatpaks
+  
   - type: fonts
     fonts:
       nerd-fonts:

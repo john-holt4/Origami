@@ -51,7 +51,7 @@ workflow:
     - bluebuild generate-iso --iso-name $ISO_NAME image $IMAGE_NAME
     - echo "Uploading $ISO_NAME to $S3_ENDPOINT_URL"
     - export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY
-    - export AWS_SECRET_KEY=$S3_SECRET_KEY
+    - export AWS_SECRET_ACCESS_KEY=$S3_SECRET_KEY
     - |
       aws s3 cp $ISO_NAME s3://origami-linux/$ISO_NAME \
         --endpoint-url $S3_ENDPOINT_URL

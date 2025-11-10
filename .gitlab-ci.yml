@@ -1,4 +1,3 @@
-# 1. We only need two stages now
 stages:
   - build   # Build container and push to registry
   - iso     # Pull container, generate ISO, and upload to S3
@@ -21,13 +20,12 @@ workflow:
     entrypoint: [""]
   services:
     - docker:dind
-  # parallel: matrix has been moved from the template to the specific jobs that need it
+  # parallel: matrix has been moved to the specific 'prod' jobs
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
-    # Set the S3 endpoint URL for Cloudflare R2
     S3_ENDPOINT_URL: "https://0041560ce1f22c78111d98dfde401cac.r2.cloudflarestorage.com"
   before_script:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
@@ -41,24 +39,16 @@ workflow:
 .generate-iso-script:
   stage: iso
   before_script:
-    # We run the template's before_script first
     - !reference [.bluebuild-job-template, before_script]
-    
-    # 3. Now we install the aws-cli in the bluebuild container
     - echo "Installing AWS CLI..."
-    # The bluebuild image is Fedora-based, so we must install 'unzip' first
     - dnf install -y unzip
     - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     - unzip awscliv2.zip
     - ./aws/install
     - echo "AWS CLI installed."
-    
   script:
-    # 4. First, generate the ISO
     - echo "Generating $ISO_NAME from image $IMAGE_NAME..."
     - bluebuild generate-iso --iso-name $ISO_NAME image $IMAGE_NAME
-    
-    # 5. Second, upload it
     - echo "Uploading $ISO_NAME to $S3_ENDPOINT_URL"
     - export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY
     - export AWS_SECRET_KEY=$S3_SECRET_KEY
@@ -124,9 +114,8 @@ generate_and_upload_iso-prod:
       - RECIPE: "recipe-nvidia.yml"
         ISO_NAME: "origami-nvidia-x86_64.iso"
         IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
-  # This job relies on stage dependency from 'build-image-prod'
 
-# --- Test Build Job ---
+# --- Test Build Job (No ISO) ---
 
 build-image-test:
   extends:
@@ -138,14 +127,3 @@ build-image-test:
     IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-test"
   script:
     - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE
-
-generate_and_upload_iso-test:
-  extends:
-    - .bluebuild-job-template
-    - .generate-iso-script
-    - .test-build-rules
-  variables: # No matrix needed for a single job
-    RECIPE: "recipe-test.yml"
-    ISO_NAME: "origami-test-x86_64.iso"
-    IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-test"
-  # This job relies on stage dependency from 'build-image-test'

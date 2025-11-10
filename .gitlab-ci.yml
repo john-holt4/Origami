@@ -21,14 +21,7 @@ workflow:
     entrypoint: [""]
   services:
     - docker:dind
-  parallel:
-    matrix:
-      - RECIPE: "recipe-base.yml"
-        ISO_NAME: "origami-x86_64.iso"
-        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami"
-      - RECIPE: "recipe-nvidia.yml"
-        ISO_NAME: "origami-nvidia-x86_64.iso"
-        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
+  # parallel: matrix has been moved from the template to the specific jobs that need it
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: /certs
@@ -44,15 +37,8 @@ workflow:
     - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - sleep 5
 
-build-image:
-  extends: .bluebuild-job-template
-  stage: build
-  script:
-    - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE
-
-# 2. This is the new, combined job
-generate_and_upload_iso:
-  extends: .bluebuild-job-template
+# This template contains the script for generating and uploading the ISO
+.generate-iso-script:
   stage: iso
   before_script:
     # We run the template's before_script first
@@ -72,11 +58,94 @@ generate_and_upload_iso:
     - echo "Generating $ISO_NAME from image $IMAGE_NAME..."
     - bluebuild generate-iso --iso-name $ISO_NAME image $IMAGE_NAME
     
-    # 5. Second, upload it (if the build succeeded)
+    # 5. Second, upload it
     - echo "Uploading $ISO_NAME to $S3_ENDPOINT_URL"
     - export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY
-    - export AWS_SECRET_ACCESS_KEY=$S3_SECRET_KEY
+    - export AWS_SECRET_KEY=$S3_SECRET_KEY
     - |
       aws s3 cp $ISO_NAME s3://origami-linux/$ISO_NAME \
         --endpoint-url $S3_ENDPOINT_URL
-        
+
+# --- Rules Templates ---
+
+.prod-build-rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" # Run for schedules
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - recipes/recipe-base.yml
+        - recipes/recipe-nvidia.yml
+        - recipes/recipe-core.yml # Core file triggers prod builds
+    - if: $CI_COMMIT_BRANCH
+      changes:
+        - recipes/recipe-base.yml
+        - recipes/recipe-nvidia.yml
+        - recipes/recipe-core.yml # Core file triggers prod builds
+    - when: never # Do not run otherwise
+
+.test-build-rules:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never # DO NOT run test build for schedules
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - recipes/recipe-test.yml # Only trigger on test recipe
+    - if: $CI_COMMIT_BRANCH
+      changes:
+        - recipes/recipe-test.yml # Only trigger on test recipe
+    - when: never # Do not run otherwise
+
+# --- Production Build Jobs (Base & Nvidia) ---
+
+build-image-prod:
+  extends:
+    - .bluebuild-job-template
+    - .prod-build-rules
+  stage: build
+  parallel:
+    matrix:
+      - RECIPE: "recipe-base.yml"
+        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami"
+      - RECIPE: "recipe-nvidia.yml"
+        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
+  script:
+    - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE
+
+generate_and_upload_iso-prod:
+  extends:
+    - .bluebuild-job-template
+    - .generate-iso-script
+    - .prod-build-rules
+  parallel:
+    matrix:
+      - RECIPE: "recipe-base.yml"
+        ISO_NAME: "origami-x86_64.iso"
+        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami"
+      - RECIPE: "recipe-nvidia.yml"
+        ISO_NAME: "origami-nvidia-x86_64.iso"
+        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
+  # This job relies on stage dependency from 'build-image-prod'
+
+# --- Test Build Job ---
+
+build-image-test:
+  extends:
+    - .bluebuild-job-template
+    - .test-build-rules
+  stage: build
+  variables: # No matrix needed for a single job
+    RECIPE: "recipe-test.yml"
+    IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-test"
+  script:
+    - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE
+
+generate_and_upload_iso-test:
+  extends:
+    - .bluebuild-job-template
+    - .generate-iso-script
+    - .test-build-rules
+  variables: # No matrix needed for a single job
+    RECIPE: "recipe-test.yml"
+    ISO_NAME: "origami-test-x86_64.iso"
+    IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-test"
+  # This job relies on stage dependency from 'build-image-test'

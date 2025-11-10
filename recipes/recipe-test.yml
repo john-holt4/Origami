@@ -58,6 +58,7 @@ modules:
         - firefox-la
   
   - type: default-flatpaks
+    configurations: []
   
   - type: fonts
     fonts:

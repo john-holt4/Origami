@@ -70,7 +70,7 @@ generate_and_upload_iso:
   script:
     # 4. First, generate the ISO
     - echo "Generating $ISO_NAME from image $IMAGE_NAME..."
-    - bluebuild generate-iso --web-ui --iso-name $ISO_NAME image $IMAGE_NAME
+    - bluebuild generate-iso --iso-name $ISO_NAME image $IMAGE_NAME
     
     # 5. Second, upload it (if the build succeeded)
     - echo "Uploading $ISO_NAME to $S3_ENDPOINT_URL"

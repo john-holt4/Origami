@@ -58,11 +58,11 @@ modules:
         - tty-clock
         - sudo-rs
         - uutils-coreutils
-        # Installs the 64-bit freeworld drivers
+        # --- AMD / Intel Codec Packages ---
         - mesa-va-drivers-freeworld
         - mesa-vdpau-drivers-freeworld
-        - intel-media-driver     # For 5th Gen Intel (Broadwell) and newer
-        - libva-intel-driver     # For 4th Gen Intel (Haswell) and older
+        - intel-media-driver
+        - libva-intel-driver
 
     remove:
       auto-remove: true
@@ -73,9 +73,19 @@ modules:
         - gnome-disk-utility
         - gnome-system-monitor
         - ark
-        - ark-libs
+        - ark-
+
+        # --- AMD Codec Swap ---
         - mesa-va-drivers
         - mesa-vdpau-drivers
+        
+        # These conflict with ffmpeg-libs from RPM Fusion
+        - libswscale-free
+        - libavcodec-free
+        - libavutil-free
+        - libavformat-free
+        - libswresample-free
+        - libpostproc-free
 
   
   - type: default-flatpaks

@@ -111,30 +111,25 @@ modules:
 
 - type: script
     snippets:
-      - |
-        set -ex # This makes the script stop if any command fails
+      # --- Install WhiteSur Icon Theme ---
+      - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
+      - /tmp/WhiteSur-icon-theme/install.sh -b -a
+      - rm -rf /tmp/WhiteSur-icon-theme
 
-        echo "--- Installing WhiteSur Icon Theme ---"
-        git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
-        /tmp/WhiteSur-icon-theme/install.sh -b -a
-        rm -rf /tmp/WhiteSur-icon-theme
-        
-        echo "--- Creating GSettings override file ---"
-        cat <<EOF > /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
-        [org.gnome.desktop.interface]
-        cursor-theme='Bibata-Modern-Classic'
-        EOF
-        
-        echo "--- Compiling GSettings schemas ---"
-        glib-compile-schemas /usr/share/glib-2.0/schemas/
-        
-        echo "--- Setting system-wide x-cursor-theme default ---"
-        update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Bibata-Modern-Classic/cursor.theme 90
-        update-alternatives --set x-cursor-theme /usr/share/icons/Bibata-Modern-Classic/cursor.theme
-        
-        echo "--- Cleaning up default wallpapers ---"
-        rm -rf /usr/share/backgrounds/cosmic
-        rm -rf /usr/share/backgrounds/fedora-workstation
+      # --- Create GSettings override file (line-by-line) ---
+      - echo "[org.gnome.desktop.interface]" > /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
+      - echo "cursor-theme='Bibata-Modern-Classic'" >> /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
+
+      # --- Compile GSettings schema ---
+      - glib-compile-schemas /usr/share/glib-2.0/schemas/
+
+      # --- Set system-wide x-cursor-theme default ---
+      - update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Bibata-Modern-Classic/cursor.theme 90
+      - update-alternatives --set x-cursor-theme /usr/share/icons/Bibata-Modern-Classic/cursor.theme
+
+      # --- Clean up default wallpapers ---
+      - rm -rf /usr/share/backgrounds/cosmic
+      - rm -rf /usr/share/backgrounds/fedora-workstation
 
   - type: os-release
     properties:

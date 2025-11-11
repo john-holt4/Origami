@@ -90,7 +90,13 @@ modules:
 
   
   - type: default-flatpaks
-    configurations: []
+    configurations:
+    - scope: user
+        repo:
+          title: Flathub (user)
+        scope: system
+        repo:
+          title: Flathub (system)
 
   - type: systemd
     system:

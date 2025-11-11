@@ -115,17 +115,8 @@ modules:
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme
 
-      - mkdir -p /etc/environment.d
-      - echo "XCURSOR_THEME=Bibata-Modern-Classic" > /etc/environment.d/60-cursor.conf
-      - echo "XCURSOR_SIZE=24" >> /etc/environment.d/60-cursor.conf
-
-      - mkdir -p /usr/share/icons/default
       - echo "[Icon Theme]" > /usr/share/icons/default/index.theme
       - echo "Inherits=Bibata-Modern-Classic" >> /usr/share/icons/default/index.theme
-
-      - echo "[org.gnome.desktop.interface]" > /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
-      - echo "cursor-theme='Bibata-Modern-Classic'" >> /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
-      - glib-compile-schemas /usr/share/glib-2.0/schemas/
 
       - rm -rf /usr/share/backgrounds/cosmic
       - rm -rf /usr/share/backgrounds/fedora-workstation

@@ -11,6 +11,7 @@ modules:
   - type: dnf
     repos:
       cleanup: true
+      nonfree: rpmfusion
       copr:
         - dejan/lazygit
         - lihaohong/yazi
@@ -24,6 +25,9 @@ modules:
 
     install:
       packages:
+        - ffmpeg-libs
+        - libva
+        - libva-utils
         - distrobox
         - tmux
         - cloudflare-warp
@@ -50,6 +54,11 @@ modules:
         - tty-clock
         - sudo-rs
         - uutils-coreutils
+        # Installs the 64-bit freeworld drivers
+        - mesa-va-drivers-freeworld
+        - mesa-vdpau-drivers-freeworld
+        - intel-media-driver     # For 5th Gen Intel (Broadwell) and newer
+        - libva-intel-driver     # For 4th Gen Intel (Haswell) and older
 
     remove:
       auto-remove: true
@@ -61,11 +70,18 @@ modules:
         - gnome-system-monitor
         - ark
         - ark-libs
+        - mesa-va-drivers
+        - mesa-vdpau-drivers
 
   
   - type: default-flatpaks
     configurations: []
-  
+
+  - type: systemd
+    system:
+      disabled:
+        - NetworkManager-wait-online.service
+
   - type: fonts
     fonts:
       nerd-fonts:

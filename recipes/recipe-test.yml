@@ -110,21 +110,21 @@ modules:
         destination: /
 
   - type: script
-      snippets:
-        - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
-        - /tmp/WhiteSur-icon-theme/install.sh -b -a
-        - rm -rf /tmp/WhiteSur-icon-theme
+    snippets:
+      - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
+      - /tmp/WhiteSur-icon-theme/install.sh -b -a
+      - rm -rf /tmp/WhiteSur-icon-theme
 
-        - echo "[org.gnome.desktop.interface]" > /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
-        - echo "cursor-theme='Bibata-Modern-Classic'" >> /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
+      - echo "[org.gnome.desktop.interface]" > /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
+      - echo "cursor-theme='Bibata-Modern-Classic'" >> /usr/share/glib-2.0/schemas/50_origami-cursor.gschema.override
 
-        - glib-compile-schemas /usr/share/glib-2.0/schemas/
+      - glib-compile-schemas /usr/share/glib-2.0/schemas/
 
-        - update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Bibata-Modern-Classic/cursor.theme 90
-        - update-alternatives --set x-cursor-theme /usr/share/icons/Bibata-Modern-Classic/cursor.theme
+      - update-alternatives --install /usr/share/icons/default/index.theme x-cursor-theme /usr/share/icons/Bibata-Modern-Classic/cursor.theme 90
+      - update-alternatives --set x-cursor-theme /usr/share/icons/Bibata-Modern-Classic/cursor.theme
 
-        - rm -rf /usr/share/backgrounds/cosmic
-        - rm -rf /usr/share/backgrounds/fedora-workstation
+      - rm -rf /usr/share/backgrounds/cosmic
+      - rm -rf /usr/share/backgrounds/fedora-workstation
 
   - type: os-release
     properties:

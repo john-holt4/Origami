@@ -22,6 +22,7 @@ modules:
         - alternateved/eza
         - atim/starship
         - dejan/rpms
+        - peterwu/rendezvous
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -29,6 +30,7 @@ modules:
 
     install:
       packages:
+        - bibata-cursor-themes
         - ffmpeg-libs
         - libva
         - libva-utils
@@ -73,8 +75,7 @@ modules:
         - gnome-disk-utility
         - gnome-system-monitor
         - ark
-        - ark-
-
+        
         # --- AMD Codec Swap ---
         - mesa-va-drivers
         - mesa-vdpau-drivers

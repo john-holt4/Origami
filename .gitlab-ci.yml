@@ -122,8 +122,8 @@ build-image-test:
     - .bluebuild-job-template
     - .test-build-rules
   stage: build
-  variables: # No matrix needed for a single job
+  variables:
     RECIPE: "recipe-test.yml"
     IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-test"
   script:
-    - bluebuild build --verbose --rechunk --push ./recipes/$RECIPE
+    - bluebuild build --verbose --rechunk --cache-layers --compression-format zstd --push ./recipes/$RECIPE

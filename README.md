@@ -1,3 +1,5 @@
+# Origami Linux has migrated to GitLab - https://gitlab.com/origami-linux
+
 # <img height="55" alt="Origami Logo" src="https://github.com/user-attachments/assets/c04f71a0-a283-4007-8381-05437b00f15a" /> Origami Linux &nbsp; [![bluebuild build badge](https://github.com/john-holt4/origami/actions/workflows/build.yml/badge.svg)](https://github.com/john-holt4/origami/actions/workflows/build.yml)
 
 Discord - [Join Here](https://discord.gg/CEvU5QqW)

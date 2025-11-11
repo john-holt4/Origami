@@ -91,10 +91,8 @@ modules:
   
   - type: default-flatpaks
     configurations:
-    - scope: user
-      repo:
-        title: Flathub (user)
-    - scope: system
+    - notify: false
+      scope: system
       repo:
         title: Flathub (system)
 

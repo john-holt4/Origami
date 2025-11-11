@@ -25,6 +25,7 @@ modules:
     install:
       packages:
         - distrobox
+        - tmux
         - cloudflare-warp
         - helix
         - lolcat

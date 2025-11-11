@@ -55,7 +55,12 @@ modules:
       packages:
         - cosmic-player
         - firefox
-        - firefox-la
+        - firefox-langpacks
+        - gnome-disk-utility
+        - gnome-system-monitor
+        - ark
+        - ark-libs
+
   
   - type: default-flatpaks
     configurations: []

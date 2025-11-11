@@ -88,14 +88,6 @@ modules:
         - libswresample-free
         - libpostproc-free
 
-  
-  - type: default-flatpaks
-    configurations:
-    - notify: false
-      scope: system
-      repo:
-        title: Flathub (system)
-
   - type: systemd
     system:
       disabled:

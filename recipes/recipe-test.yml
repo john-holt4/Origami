@@ -118,6 +118,9 @@ modules:
 
       - rm -rf /usr/share/backgrounds/cosmic
       - rm -rf /usr/share/backgrounds/fedora-workstation
+      - rm -rf /usr/share/backgrounds/images
+      - rm /usr/share/backgrounds/default.jxl
+      - rm /usr/share/backgrounds/default-dark.jxl
 
   - type: os-release
     properties:

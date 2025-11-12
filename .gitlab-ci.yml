@@ -123,7 +123,7 @@ build-image-test:
     - .test-build-rules
   stage: build
   image:
-    name: ghcr.io/blue-build/cli:main
+    name: ghcr.io/blue-build/cli:560207a747f2f94944204586c304c8e0e91989be
     entrypoint: [""]
   variables:
     RECIPE: "recipe-test.yml"

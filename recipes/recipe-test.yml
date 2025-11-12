@@ -30,6 +30,7 @@ modules:
 
     install:
       packages:
+        - traceroute
         - bibata-cursor-themes
         - ffmpeg-libs
         - libva

@@ -6,6 +6,7 @@ description: "Origami is a next-generation Linux distribution inspired by the ar
 
 base-image: quay.io/fedora-ostree-desktops/cosmic-atomic
 image-version: 43
+blue-build-tag: main-installer
 modules:
 
   - type: script

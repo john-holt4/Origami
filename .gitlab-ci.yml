@@ -122,6 +122,9 @@ build-image-test:
     - .bluebuild-job-template
     - .test-build-rules
   stage: build
+  image:
+    name: ghcr.io/blue-build/cli:main
+    entrypoint: [""]
   variables:
     RECIPE: "recipe-test.yml"
     IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-test"

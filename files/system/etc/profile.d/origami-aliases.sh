@@ -144,7 +144,7 @@ alias yes='uu_yes'
 # --- Nag user to use 'fd' instead of 'find' ---
 function find {
     if [ -t 2 ]; then
-        printf '💡 Tip: Try using "fd" next time for a simpler and faster search.\n' >&2
+        printf 'Tip: Try using "fd" next time for a simpler and faster search.\n' >&2
     fi
     command find "$@"
 }
@@ -152,7 +152,7 @@ function find {
 # --- Nag user to use 'rg' instead of 'grep' ---
 function grep {
     if [ -t 2 ]; then
-        printf '💡 Tip: Try using "rg" for a simpler and faster search.\n' >&2
+        printf 'Tip: Try using "rg" for a simpler and faster search.\n' >&2
     fi
     command grep "$@"
 }

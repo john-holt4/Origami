@@ -93,7 +93,7 @@ modules:
   - type: systemd
     system:
       enabled:
-        - rpm-ostreed-automatic.time
+        - rpm-ostreed-automatic.timer
       disabled:
         - NetworkManager-wait-online.service
 

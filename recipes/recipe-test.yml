@@ -71,6 +71,7 @@ modules:
     remove:
       auto-remove: true
       packages:
+        - fedora-flathub-remote
         - cosmic-player
         - firefox
         - firefox-langpacks
@@ -92,10 +93,11 @@ modules:
 
   - type: systemd
     system:
-      enabled:
+      masked:
         - rpm-ostreed-automatic.timer
-      disabled:
         - NetworkManager-wait-online.service
+      enabled:
+        - bootc-fetch-apply-updates.timer
 
   - type: fonts
     fonts:

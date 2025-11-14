@@ -92,34 +92,38 @@ modules:
 
   - type: script
     snippets:
-      - echo '[Unit]' > /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'Description=Add Flathub flatpak repositories. This replaces a service included by Fedora that normally installs their repo.' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'ConditionPathExists=!/var/lib/flatpak/.origami-initialized' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'Before=flatpak-system-helper.service' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo '' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'Wants=network-online.target' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'After=network-online.target' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo '' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo '[Service]' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'Type=oneshot' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'RemainAfterExit=yes' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'ExecStart=/usr/bin/flatpak remote-add --system --if-not-exists Flathub https://flathub.org/repo/flathub.flatpakrepo' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'ExecStart=/usr/bin/flatpak remote-add --system --if-not-exists COSMIC https://apt.pop-os.org/cosmic/cosmic.flatpakrepo' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'ExecStart=/usr/bin/flatpak remote-add --system --if-not-exists --disable --title "Fedora Flatpaks" fedora oci+https://registry.fedoraproject.org' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'ExecStart=/usr/bin/flatpak remote-add --system --if-not-exists --disable --title "Fedora Flatpaks (testing)" fedora-testing oci+https://registry.fedoraproject.org#testing' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'ExecStartPost=/usr/bin/touch /var/lib/flatpak/.origami-initialized' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo '' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo '[Install]' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
-      - echo 'WantedBy=multi-user.target' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
+      - echo '[Unit]' > /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'Description=Add user Flatpak repositories (Flathub, COSMIC)' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'ConditionPathExists=!%h/.local/share/flatpak/.user-repos-initialized' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo '[Service]' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'Type=oneshot' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'RemainAfterExit=yes' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'ExecStartPre=/usr/bin/mkdir -p %h/.local/share/flatpak' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists Flathub https://flathub.org/repo/flathub.flatpakrepo' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists COSMIC https://apt.pop-os.org/cosmic/cosmic.flatpakrepo' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --disable --title "Fedora Flatpaks" fedora oci+https://registry.fedoraproject.org' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --disable --title "Fedora Flatpaks (testing)" fedora-testing oci+https://registry.fedoraproject.org#testing' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'ExecStartPost=/usr/bin/touch %h/.local/share/flatpak/.user-repos-initialized' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo '[Install]' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
+      - echo 'WantedBy=default.target' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
 
   - type: systemd
     system:
       disabled:
-        # - NetworkManager-wait-online.service
+        - NetworkManager-wait-online.service
         - flatpak-add-fedora-repos.service
       enabled:
         - rpm-ostreed-automatic.timer
-        - flatpak-add-flathub-repos.service
+    user:
+      enabled:
+        - flatpak-add-user-repos.service
+
   - type: fonts
     fonts:
       nerd-fonts:

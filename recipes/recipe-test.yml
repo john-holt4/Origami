@@ -2,7 +2,7 @@
 
 name: origami-test
 
-description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece"
+description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece."
 
 base-image: quay.io/fedora-ostree-desktops/cosmic-atomic
 image-version: 43
@@ -118,10 +118,13 @@ modules:
           name: cosmic
           title: COSMIC Flatpak
           url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+      - scope: user
+        notify: false
         repo:
           url: https://flathub.org/repo/flathub.flatpakrepo
           title: Flathub
           name: flathub
+
 
   - type: script
     snippets:

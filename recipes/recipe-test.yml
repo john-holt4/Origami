@@ -94,10 +94,9 @@ modules:
   - type: systemd
     system:
       masked:
-        - rpm-ostreed-automatic.timer
         - NetworkManager-wait-online.service
       enabled:
-        - bootc-fetch-apply-updates.timer
+        - rpm-ostreed-automatic.timer
 
   - type: fonts
     fonts:
@@ -120,8 +119,8 @@ modules:
           title: COSMIC Flatpak
           url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
         repo:
+          name: flathub
           url: https://flathub.org/repo/flathub.flatpakrepo
-          title: Flathub
 
   - type: script
     snippets:

@@ -129,4 +129,4 @@ build-image-test:
     RECIPE: "recipe-test.yml"
     IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-test"
   script:
-    - bluebuild build --verbose --rechunk --cache-layers --compression-format zstd --push ./recipes/$RECIPE
+    - bluebuild build --verbose --cache-layers --compression-format zstd --push ./recipes/$RECIPE

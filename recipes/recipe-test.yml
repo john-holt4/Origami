@@ -119,6 +119,9 @@ modules:
           name: cosmic
           title: COSMIC Flatpak
           url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+        repo:
+          url: https://flathub.org/repo/flathub.flatpakrepo
+          title: Flathub
 
   - type: script
     snippets:

@@ -115,7 +115,7 @@ modules:
   - type: systemd
     system:
       disabled:
-        - NetworkManager-wait-online.service
+        # - NetworkManager-wait-online.service
         - flatpak-add-fedora-repos.service
       enabled:
         - rpm-ostreed-automatic.timer

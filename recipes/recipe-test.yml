@@ -151,17 +151,6 @@ modules:
       - rm /usr/share/backgrounds/default-dark.jxl
       - rm /usr/share/backgrounds/default.xml
 
-      # Cleanup
-      - rm -rf /tmp/* || true
-      - rm -rf /usr/etc
-      - rm -rf /boot && mkdir /boot
-      - find /var/* -maxdepth 0 -type d \! -name cache \! -name log -exec rm -rf {} \;
-      - find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 -exec rm -rf {} \;
-
-      # Make sure /var/tmp is properly created
-      - mkdir -p /var/tmp
-      - chmod -R 1777 /var/tmp
-
   - type: os-release
     properties:
       ID: origami-linux-test

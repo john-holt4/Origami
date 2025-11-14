@@ -112,8 +112,8 @@ modules:
 
   - type: script
     snippets:
-      - flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-      - flatpak remote-add --if-not-exists cosmic https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+      - flatpak remote-add --if-not-exists Flathub https://flathub.org/repo/flathub.flatpakrepo
+      - flatpak remote-add --if-not-exists COSMIC https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme

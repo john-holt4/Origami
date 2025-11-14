@@ -90,26 +90,6 @@ modules:
         - libswresample-free
         - libpostproc-free
 
-  - type: systemd
-    system:
-      disabled:
-        - NetworkManager-wait-online.service
-        - flatpak-add-fedora-repos.service
-      enabled:
-        - rpm-ostreed-automatic.timer
-
-  - type: fonts
-    fonts:
-      nerd-fonts:
-        - JetBrainsMono
-      google-fonts:
-        - Inter
-
-  - type: files
-    files:
-      - source: system
-        destination: /
-
   - type: script
     snippets:
       - echo '[Unit]' > /usr/lib/systemd/system/flatpak-add-flathub-repos.service
@@ -129,6 +109,28 @@ modules:
       - echo '[Install]' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
       - echo 'WantedBy=multi-user.target' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
 
+  - type: systemd
+    system:
+      disabled:
+        - NetworkManager-wait-online.service
+        - flatpak-add-fedora-repos.service
+      enabled:
+        - rpm-ostreed-automatic.timer
+        - flatpak-add-flathub-repos.service
+  - type: fonts
+    fonts:
+      nerd-fonts:
+        - JetBrainsMono
+      google-fonts:
+        - Inter
+
+  - type: files
+    files:
+      - source: system
+        destination: /
+
+  - type: script
+    snippets:
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
       - /tmp/WhiteSur-icon-theme/install.sh -b -a
       - rm -rf /tmp/WhiteSur-icon-theme

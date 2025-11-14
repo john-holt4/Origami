@@ -105,8 +105,6 @@ modules:
       - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
       - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title=Flathub flathub https://flathub.org/repo/flathub.flatpakrepo' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
       - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title=COSMIC cosmic https://apt.pop-os.org/cosmic/cosmic.flatpakrepo' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --disable --title "Fedora Flatpaks" fedora oci+https://registry.fedoraproject.org' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --disable --title "Fedora Flatpaks (testing)" fedora-testing oci+https://registry.fedoraproject.org#testing' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
       - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
       - echo 'ExecStartPost=/usr/bin/touch %h/.local/share/flatpak/.user-repos-initialized' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
       - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service

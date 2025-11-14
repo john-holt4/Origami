@@ -2,3 +2,4 @@ cosign.key
 cosign.private
 /Containerfile
 /.bluebuild-scripts_*
+.github/instructions/bluebuild-docs.instructions.md

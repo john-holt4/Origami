@@ -111,6 +111,21 @@ modules:
       - source: system
         destination: /
 
+  - type: default-flatpaks
+    configurations:
+      - scope: system
+        notify: false
+        repo:
+          name: flathub
+          title: Flathub
+          url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      - scope: system
+        notify: false
+        repo:
+          name: cosmic
+          title: COSMIC Flatpak
+          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+
   - type: script
     snippets:
       - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme

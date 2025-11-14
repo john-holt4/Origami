@@ -97,6 +97,9 @@ modules:
       - echo 'ConditionPathExists=!/var/lib/flatpak/.origami-initialized' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
       - echo 'Before=flatpak-system-helper.service' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
       - echo '' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
+      - echo 'Wants=network-online.target' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
+      - echo 'After=network-online.target' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
+      - echo '' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
       - echo '[Service]' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
       - echo 'Type=oneshot' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
       - echo 'RemainAfterExit=yes' >> /usr/lib/systemd/system/flatpak-add-flathub-repos.service
@@ -145,6 +148,17 @@ modules:
       - rm /usr/share/backgrounds/default.jxl
       - rm /usr/share/backgrounds/default-dark.jxl
       - rm /usr/share/backgrounds/default.xml
+
+      # Cleanup
+      - rm -rf /tmp/* || true
+      - rm -rf /usr/etc
+      - rm -rf /boot && mkdir /boot
+      - find /var/* -maxdepth 0 -type d \! -name cache \! -name log -exec rm -rf {} \;
+      - find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 -exec rm -rf {} \;
+
+      # Make sure /var/tmp is properly created
+      - mkdir -p /var/tmp
+      - chmod -R 1777 /var/tmp
 
   - type: os-release
     properties:

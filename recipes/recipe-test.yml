@@ -8,7 +8,6 @@ base-image: quay.io/fedora-ostree-desktops/cosmic-atomic
 image-version: 43
 blue-build-tag: main
 modules:
-
   - type: script
     snippets:
       - echo 'max_parallel_downloads=10' >> /etc/dnf/dnf.conf
@@ -78,11 +77,11 @@ modules:
         - gnome-disk-utility
         - gnome-system-monitor
         - ark
-        
+
         # --- AMD Codec Swap ---
         - mesa-va-drivers
         - mesa-vdpau-drivers
-        
+
         # These conflict with ffmpeg-libs from RPM Fusion
         - libswscale-free
         - libavcodec-free
@@ -116,15 +115,20 @@ modules:
         notify: false
         repo:
           name: cosmic
-          title: COSMIC Flatpak
+          title: COSMIC
           url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
       - scope: user
         notify: false
         repo:
-          url: https://flathub.org/repo/flathub.flatpakrepo
-          title: Flathub
+          url: https://dl.flathub.org/repo/flathub.flatpakrepo
           name: flathub
-
+          title: Flathub (user)
+      - scope: system
+        notify: false
+        repo:
+          url: https://dl.flathub.org/repo/flathub.flatpakrepo
+          name: org-system
+          title: Flathub (system, managed)
 
   - type: script
     snippets:

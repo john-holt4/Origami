@@ -113,13 +113,7 @@ modules:
 
   - type: default-flatpaks
     configurations:
-      - scope: system
-        notify: false
-        repo:
-          name: flathub
-          title: Flathub
-          url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      - scope: system
+      - scope: user
         notify: false
         repo:
           name: cosmic

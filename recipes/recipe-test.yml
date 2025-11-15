@@ -111,22 +111,20 @@ modules:
 
   - type: default-flatpaks
     configurations:
-      - notify: false
-        scope: user
+      - scope: user
+        repo:
+          name: flathub
+          title: Flathub
+        install:
+          - app.zen_browser.zen
+      - scope: user
         repo:
           name: cosmic
           title: COSMIC
           url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
-        install: []
-
-      - notify: false
-        scope: user
-        repo:
-          name: flathub
-          title: Flathub
-          url: https://dl.flathub.org/repo/flathub.flatpakrepo
         install:
-          - app.zen_browser.zen
+          - io.github.cosmic_utils.sysinfo-applet
+          - dev.cappsy.CosmicExtAppletLogoMenu
 
   - type: script
     snippets:

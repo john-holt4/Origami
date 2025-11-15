@@ -111,16 +111,18 @@ modules:
 
   - type: default-flatpaks
     configurations:
-      - scope: user
-        notify: false
+      - notify: false
+        scope: user
         repo:
           name: cosmic
           title: COSMIC
           url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
-      - scope: user
+      - notify: false
+        scope: user
         repo:
           name: flathub
           title: Flathub
+          url: https://dl.flathub.org/repo/flathub.flatpakrepo
 
   - type: script
     snippets:

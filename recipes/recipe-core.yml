@@ -17,6 +17,7 @@ modules:
 
     install:
       packages:
+        - rsms-inter-fonts
         - cosmic-app-library
         - cosmic-applets
         - cosmic-bg
@@ -84,8 +85,6 @@ modules:
     fonts:
       nerd-fonts:
         - JetBrainsMono
-      google-fonts:
-        - Inter
 
   - type: files
     files:

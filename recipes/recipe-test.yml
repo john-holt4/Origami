@@ -2,7 +2,7 @@
 
 name: origami-test
 
-description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece. "
+description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece."
 
 base-image: quay.io/fedora-ostree-desktops/cosmic-atomic
 image-version: 43
@@ -91,27 +91,6 @@ modules:
         - libswresample-free
         - libpostproc-free
 
-  - type: script
-    snippets:
-      - echo '[Unit]' > /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'Description=Add user Flatpak repositories (Flathub, COSMIC)' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'ConditionPathExists=!%h/.local/share/flatpak/.user-repos-initialized' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo '[Service]' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'Type=oneshot' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'RemainAfterExit=yes' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'ExecStartPre=/usr/bin/mkdir -p %h/.local/share/flatpak' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title=Flathub flathub https://flathub.org/repo/flathub.flatpakrepo' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title=COSMIC cosmic https://apt.pop-os.org/cosmic/cosmic.flatpakrepo' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'ExecStartPost=/usr/bin/touch %h/.local/share/flatpak/.user-repos-initialized' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo '' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo '[Install]' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-      - echo 'WantedBy=default.target' >> /usr/lib/systemd/user/flatpak-add-user-repos.service
-
   - type: systemd
     system:
       disabled:
@@ -119,9 +98,6 @@ modules:
         - flatpak-add-fedora-repos.service
       enabled:
         - rpm-ostreed-automatic.timer
-    user:
-      enabled:
-        - flatpak-add-user-repos.service
 
   - type: fonts
     fonts:
@@ -132,6 +108,19 @@ modules:
     files:
       - source: system
         destination: /
+
+  - type: default-flatpaks
+    configurations:
+      - scope: user
+        notify: false
+        repo:
+          name: cosmic
+          title: COSMIC
+          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+      - scope: user
+        repo:
+          name: flathub
+          title: Flathub
 
   - type: script
     snippets:

@@ -10,7 +10,6 @@ modules:
         - alternateved/eza
         - atim/starship
         - dejan/rpms
-        - sneexy/zen-browser
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -68,7 +67,6 @@ modules:
         - tty-clock
         - sudo-rs
         - uutils-coreutils
-        - zen-browser
         # cosmic-files network/fuse support
         - gvfs-fuse
         - gvfs-smb
@@ -92,6 +90,25 @@ modules:
     files:
       - source: system
         destination: /
+
+  - type: default-flatpaks
+    configurations:
+      - notify: false
+        scope: user
+        repo:
+          name: cosmic
+          title: COSMIC
+          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+        install: []
+
+      - notify: false
+        scope: user
+        repo:
+          name: flathub
+          title: Flathub
+          url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        install:
+          - app.zen_browser.zen
 
   - type: script
     snippets:

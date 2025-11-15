@@ -1,6 +1,6 @@
 stages:
-  - build   # Build container and push to registry
-  - iso     # Pull container, generate ISO, and upload to S3
+  - build # Build container and push to registry
+  - iso # Pull container, generate ISO, and upload to S3
 
 workflow:
   rules:
@@ -39,7 +39,11 @@ workflow:
 .generate-iso-script:
   stage: iso
   before_script:
-    - !reference [.bluebuild-job-template, before_script]
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+    - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
+    - echo "Logging in to $CI_REGISTRY..."
+    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - sleep 5
     - echo "Installing AWS CLI..."
     - dnf install -y unzip
     - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"

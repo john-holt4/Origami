@@ -125,6 +125,7 @@ modules:
         repo:
           name: flatpak
           title: Flatpak
+          url: https://dl.flathub.org/repo/flathub.flatpakrepo
 
   - type: script
     snippets:

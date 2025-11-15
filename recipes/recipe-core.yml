@@ -66,6 +66,11 @@ modules:
         - tty-clock
         - sudo-rs
         - uutils-coreutils
+        # cosmic-files network/fuse support
+        - gvfs-fuse
+        - gvfs-smb
+        - gvfs-nfs
+        - gvfs-mtp
 
     remove:
       auto-remove: true

@@ -10,6 +10,7 @@ modules:
         - alternateved/eza
         - atim/starship
         - dejan/rpms
+        - sneexy/zen-browser
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -67,6 +68,7 @@ modules:
         - tty-clock
         - sudo-rs
         - uutils-coreutils
+        - zen-browser
         # cosmic-files network/fuse support
         - gvfs-fuse
         - gvfs-smb

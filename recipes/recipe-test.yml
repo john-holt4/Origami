@@ -1,13 +1,24 @@
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 
 name: origami-test
-
 description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece."
-
-base-image: quay.io/fedora-ostree-desktops/cosmic-atomic
-image-version: 43
+base-image: ghcr.io/blue-build/base-images/fedora-cosmic
+image-version: latest
 blue-build-tag: main
 modules:
+  - type: signing
+
+  - type: files
+    files:
+      - source: system
+        destination: /
+
+  - type: systemd
+    system:
+      masked:
+        - NetworkManager-wait-online.service
+        - flatpak-add-fedora-repos.service
+
   - type: script
     snippets:
       - echo 'max_parallel_downloads=10' >> /etc/dnf/dnf.conf
@@ -15,7 +26,6 @@ modules:
   - type: dnf
     repos:
       cleanup: true
-      nonfree: rpmfusion
       copr:
         - dejan/lazygit
         - lihaohong/yazi
@@ -23,6 +33,7 @@ modules:
         - atim/starship
         - dejan/rpms
         - peterwu/rendezvous
+        - championpeak87/cosmic-ext-classic-menu
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -31,13 +42,8 @@ modules:
     install:
       packages:
         - rsms-inter-fonts
-        - traceroute
+        - cosmic-ext-classic-menu
         - bibata-cursor-themes
-        - ffmpeg-libs
-        - libva
-        - libva-utils
-        - distrobox
-        - tmux
         - cloudflare-warp
         - helix
         - lolcat
@@ -62,52 +68,27 @@ modules:
         - tty-clock
         - sudo-rs
         - uutils-coreutils
-        # --- AMD / Intel Codec Packages ---
-        - mesa-va-drivers-freeworld
-        - mesa-vdpau-drivers-freeworld
-        - intel-media-driver
-        - libva-intel-driver
+        - gvfs-fuse
+        - gvfs-smb
+        - gvfs-nfs
+        - gvfs-mtp
 
     remove:
       auto-remove: true
       packages:
-        - fedora-flathub-remote
         - cosmic-player
         - firefox
         - firefox-langpacks
         - gnome-disk-utility
         - gnome-system-monitor
         - ark
-
-        # --- AMD Codec Swap ---
-        - mesa-va-drivers
-        - mesa-vdpau-drivers
-
-        # These conflict with ffmpeg-libs from RPM Fusion
-        - libswscale-free
-        - libavcodec-free
-        - libavutil-free
-        - libavformat-free
-        - libswresample-free
-        - libpostproc-free
-
-  - type: systemd
-    system:
-      disabled:
-        - NetworkManager-wait-online.service
-        - flatpak-add-fedora-repos.service
-      enabled:
-        - rpm-ostreed-automatic.timer
+        - htop
+        - vim
 
   - type: fonts
     fonts:
       nerd-fonts:
         - JetBrainsMono
-
-  - type: files
-    files:
-      - source: system
-        destination: /
 
   - type: default-flatpaks
     configurations:
@@ -153,5 +134,3 @@ modules:
       DEFAULT_HOSTNAME: origami
 
   - type: initramfs
-
-  - type: signing

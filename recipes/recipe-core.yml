@@ -18,7 +18,6 @@ modules:
     repos:
       cleanup: true
       copr:
-        - dejan/lazygit
         - lihaohong/yazi
         - alternateved/eza
         - atim/starship
@@ -48,7 +47,6 @@ modules:
         - bat
         - ripgrep
         - zoxide
-        - lazygit
         - yazi
         - eza
         - hyperfine

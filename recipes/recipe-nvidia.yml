@@ -4,13 +4,24 @@ name: origami-nvidia
 
 description: "Origami is a next-generation Linux distribution inspired by the art of Japanese paper folding. Built on Fedora Atomic, Origami elegantly folds together cutting-edge tools, beautiful design, and thoughtful defaults to create a lightweight, customizable, and visually stunning operating system using the Cosmic desktop environment. With a focus on simplicity, speed, and creativity, Origami empowers users to shape their digital environment as effortlessly as folding a masterpiece."
 
-base-image: ghcr.io/ublue-os/base-main
+base-image: ghcr.io/blue-build/base-images/fedora-cosmic-nvidia
 image-version: latest
 
 modules:
-  # Add the NVIDIA drivers
-  - type: akmods
-    nvidia-driver: nvidia
-    install: []
-  
   - from-file: recipe-core.yml
+
+  - type: dnf
+    install:
+      packages:
+        - nvtop
+
+  - type: os-release
+    properties:
+      ID: origami-linux-nvidia
+      NAME: Origami Linux Nvidia
+      PRETTY_NAME: Origami 折り紙
+      HOME_URL: "https://origami.dpdns.org/"
+      BUG_REPORT_URL: "https://gitlab.com/groups/origami-linux/-/issues"
+      DEFAULT_HOSTNAME: origami
+
+  - type: initramfs

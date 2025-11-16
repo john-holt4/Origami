@@ -5,129 +5,14 @@ description: "Origami is a next-generation Linux distribution inspired by the ar
 base-image: ghcr.io/blue-build/base-images/fedora-cosmic
 image-version: latest
 blue-build-tag: main
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 modules:
-  - type: signing
-
-  - type: files
-    files:
-      - source: system
-        destination: /
-
-  - type: systemd
-    system:
-      masked:
-        - NetworkManager-wait-online.service
-        - flatpak-add-fedora-repos.service
-
-  - type: script
-    snippets:
-      - echo 'max_parallel_downloads=10' >> /etc/dnf/dnf.conf
-
-  - type: dnf
-    repos:
-      cleanup: true
-      copr:
-        - dejan/lazygit
-        - lihaohong/yazi
-        - alternateved/eza
-        - atim/starship
-        - dejan/rpms
-        - peterwu/rendezvous
-      files:
-        - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
-      keys:
-        - https://pkg.cloudflareclient.com/pubkey.gpg
-
-    install:
-      packages:
-        - rsms-inter-fonts
-        - bibata-cursor-themes
-        - cloudflare-warp
-        - lolcat
-        - figlet
-        - cowsay
-        - btop
-        - fastfetch
-        - podman-compose
-        - axel
-        - aria2c
-        - cava
-        - bat
-        - ripgrep
-        - zoxide
-        - lazygit
-        - yazi
-        - eza
-        - hyperfine
-        - starship
-        - cbonsai
-        - cmatrix
-        - tty-clock
-        - sudo-rs
-        - uutils-coreutils
-        - gvfs-fuse
-        - gvfs-smb
-        - gvfs-nfs
-        - gvfs-mtp
-
-    remove:
-      auto-remove: true
-      packages:
-        - cosmic-player
-        - firefox
-        - firefox-langpacks
-        - gnome-disk-utility
-        - gnome-system-monitor
-        - ark
-        - htop
-        - vim
-        - nvtop
-
-  - type: fonts
-    fonts:
-      nerd-fonts:
-        - JetBrainsMono
-
-  - type: default-flatpaks
-    configurations:
-      - notify: false
-        scope: user
-        repo:
-          name: flathub
-          title: Flathub
-        install:
-          - app.zen_browser.zen
-      - notify: false
-        scope: user
-        repo:
-          name: cosmic
-          title: COSMIC
-          url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
-        install:
-          - io.github.cosmic_utils.sysinfo-applet
-          - dev.cappsy.CosmicExtAppletLogoMenu
-
-  - type: script
-    snippets:
-      - git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git /tmp/WhiteSur-icon-theme
-      - /tmp/WhiteSur-icon-theme/install.sh -b -a
-      - rm -rf /tmp/WhiteSur-icon-theme
-
-      - echo "[Icon Theme]" > /usr/share/icons/default/index.theme
-      - echo "Inherits=Bibata-Modern-Classic" >> /usr/share/icons/default/index.theme
-
-      - rm -rf /usr/share/backgrounds/cosmic
-      - rm -rf /usr/share/backgrounds/fedora-workstation
-      - rm -rf /usr/share/backgrounds/images
-      - rm -rf /usr/share/backgrounds/f43
-      - rm /usr/share/backgrounds/default.jxl
-      - rm /usr/share/backgrounds/default-dark.jxl
-      - rm /usr/share/backgrounds/default.xml
+  - from-file: recipe-core-test.yml
 
   - type: os-release
     properties:
       ID: origami-linux-test
-      NAME: Origami Linux
+      NAME: Origami Linux Test
       PRETTY_NAME: Origami 折り紙
       HOME_URL: "https://origami.dpdns.org/"
       BUG_REPORT_URL: "https://gitlab.com/groups/origami-linux/-/issues"

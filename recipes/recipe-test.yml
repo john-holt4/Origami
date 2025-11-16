@@ -90,13 +90,15 @@ modules:
 
   - type: default-flatpaks
     configurations:
-      - scope: user
+      - notify: false
+        scope: user
         repo:
           name: flathub
           title: Flathub
         install:
           - app.zen_browser.zen
-      - scope: user
+      - notify: false
+        scope: user
         repo:
           name: cosmic
           title: COSMIC

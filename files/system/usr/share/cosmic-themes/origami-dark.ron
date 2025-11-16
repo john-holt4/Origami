@@ -1,6 +1,6 @@
 (
     palette: Dark((
-        name: "origami-paper-dark",
+        name: "cosmic-dark",
         bright_red: (
             red: 0.7490196,
             green: 0.38039216,

@@ -1,6 +1,6 @@
 (
     palette: Light((
-        name: "origami-paper-light",
+        name: "cosmic-light",
         bright_red: ( // Brighter, saturated "Paprika"
             red: 0.8156863,
             green: 0.5294118,

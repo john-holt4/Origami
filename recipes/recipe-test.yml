@@ -33,7 +33,6 @@ modules:
         - atim/starship
         - dejan/rpms
         - peterwu/rendezvous
-        - championpeak87/cosmic-ext-classic-menu
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -42,10 +41,8 @@ modules:
     install:
       packages:
         - rsms-inter-fonts
-        - cosmic-ext-classic-menu
         - bibata-cursor-themes
         - cloudflare-warp
-        - helix
         - lolcat
         - figlet
         - cowsay

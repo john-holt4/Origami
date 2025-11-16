@@ -83,10 +83,12 @@ workflow:
       when: never # DO NOT run test build for schedules
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
-        - recipes/recipe-test.yml # Only trigger on test recipe
+        - recipes/recipe-test.yml
+        - recipes/recipe-core-test.yml
     - if: $CI_COMMIT_BRANCH
       changes:
-        - recipes/recipe-test.yml # Only trigger on test recipe
+        - recipes/recipe-test.yml
+        - recipes/recipe-core-test.yml
     - when: never # Do not run otherwise
 
 # --- Production Build Jobs (Base & Nvidia) ---

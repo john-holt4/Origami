@@ -24,6 +24,7 @@ modules:
         - dejan/rpms
         - peterwu/rendezvous
         - sneexy/zen-browser
+        - lilay/topgrade
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -31,6 +32,7 @@ modules:
 
     install:
       packages:
+        - topgrade
         - zen-browser
         - rsms-inter-fonts
         - bibata-cursor-themes

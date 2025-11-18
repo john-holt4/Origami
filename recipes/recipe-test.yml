@@ -10,7 +10,8 @@ modules:
 
   - type: os-release
     properties:
-      ID: fedora-immutable
+      ID: fedora
+      VARIANT: Sway Atomic
       NAME: Origami Linux Test
       PRETTY_NAME: Origami 折り紙
       HOME_URL: "https://origami.dpdns.org/"

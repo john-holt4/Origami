@@ -43,7 +43,7 @@ eval "$(fzf --bash)"
 eval "$(starship init bash)"
 eval "$(zoxide init bash --cmd cd)"
 
-# === uutils-coreutils Aliases ===
+# --- uutils-coreutils Aliases ---
 for uu_bin in /usr/bin/uu_*; do
 	[ -e "$uu_bin" ] || continue
 	base_cmd=$(basename "$uu_bin")
@@ -53,7 +53,7 @@ for uu_bin in /usr/bin/uu_*; do
 	esac
 	alias "$std_cmd"="$base_cmd"
 done
-# === End uutils ===
+# --- End uutils ---
 
 # --- SAFE NAGS (Completion Aware) ---
 

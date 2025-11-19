@@ -21,6 +21,7 @@ trigger-base:
         - recipes/recipe-base.yml
         - recipes/recipe-core.yml
         - .gitlab-ci-base.yml
+        - "files/**/*" # <--- Triggers if ANY file in 'files/' changes
 # --- Trigger Nvidia Pipeline ---
 trigger-nvidia:
   stage: triggers
@@ -33,6 +34,7 @@ trigger-nvidia:
         - recipes/recipe-nvidia.yml
         - recipes/recipe-core.yml
         - .gitlab-ci-nvidia.yml
+        - "files/**/*" # <--- Triggers if ANY file in 'files/' changes
 # --- Trigger Test Pipeline ---
 trigger-test:
   stage: triggers
@@ -46,3 +48,4 @@ trigger-test:
         - recipes/recipe-test.yml
         - recipes/recipe-core-test.yml
         - .gitlab-ci-test.yml
+        - "files/**/*" # <--- Triggers if ANY file in 'files/' changes

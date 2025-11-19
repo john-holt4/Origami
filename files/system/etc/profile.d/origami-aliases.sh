@@ -6,7 +6,7 @@ if [ -n "$DISTROBOX_ENTER_PATH" ]; then
 fi
 
 # 2. CLEANUP: Remove old function definitions to prevent conflicts
-# This fixes the issue where old "function grep" overrides persist and break autocomplete.
+# This fixes the issue where old "function grep" overrides persist and break autocomplete
 unset -f grep find tmux ls ll 2>/dev/null
 
 # --- Fastfetch Wrapper ---

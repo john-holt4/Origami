@@ -6,7 +6,6 @@ if [ -n "$DISTROBOX_ENTER_PATH" ]; then
 fi
 
 # 2. CLEANUP: Remove old function definitions to prevent conflicts
-# This fixes the issue where old "function grep" overrides persist and break autocomplete.
 unset -f grep find tmux ls ll 2>/dev/null
 
 # --- Fastfetch Wrapper ---
@@ -28,7 +27,10 @@ alias lt='eza --tree --level=2 --icons'
 alias update='topgrade'
 
 # --- eza Functions (Override ls/ll) ---
+unalias ls 2>/dev/null
 ls() { command eza --icons "$@"; }
+
+unalias ll 2>/dev/null
 ll() { command eza -l --icons "$@"; }
 
 # --- Modern Replacements ---
@@ -39,9 +41,10 @@ alias sudo='sudo-rs'
 alias su='su-rs'
 
 # --- Initializations ---
-eval "$(fzf --bash)"
-eval "$(starship init bash)"
-eval "$(zoxide init bash --cmd cd)"
+# We check if these commands exist to avoid errors on bare systems
+if command -v fzf &>/dev/null; then eval "$(fzf --bash)"; fi
+if command -v starship &>/dev/null; then eval "$(starship init bash)"; fi
+if command -v zoxide &>/dev/null; then eval "$(zoxide init bash --cmd cd)"; fi
 
 # --- uutils-coreutils Aliases ---
 for uu_bin in /usr/bin/uu_*; do

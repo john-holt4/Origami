@@ -1,6 +1,3 @@
-# --- Global Defaults for Child Pipelines ---
-default:
-  interruptible: true
 # --- Reusable Setup Logic ---
 .setup_env: &setup_env
   - echo "Waiting for Docker daemon..."
@@ -10,6 +7,8 @@ default:
   - echo "Logging in to $CI_REGISTRY..."
   - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
 .bluebuild-job-template:
+  # THIS IS THE MISSING PIECE:
+  interruptible: true
   tags:
     - saas-linux-2xlarge-amd64
   image:

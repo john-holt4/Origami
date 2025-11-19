@@ -83,3 +83,11 @@ function grep {
     fi
     command grep "$@"
 }
+
+# --- Nag user to use 'fd' instead of 'find' ---
+function tmux {
+    if [ -t 2 ]; then
+        printf 'Tip: Try using "zellij" for a better experience.\n' >&2
+    fi
+    command find "$@"
+}

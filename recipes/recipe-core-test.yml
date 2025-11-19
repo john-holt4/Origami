@@ -24,7 +24,8 @@ modules:
         - dejan/rpms
         - peterwu/rendezvous
         - sneexy/zen-browser
-        - lilay/topgrade
+        - lilay/
+        - varlad/zellij
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
       keys:
@@ -32,6 +33,7 @@ modules:
 
     install:
       packages:
+        - zellij
         - topgrade
         - zen-browser
         - rsms-inter-fonts
@@ -44,7 +46,7 @@ modules:
         - fastfetch
         - podman-compose
         - axel
-        - aria2c
+        - aria2
         - cava
         - bat
         - ripgrep

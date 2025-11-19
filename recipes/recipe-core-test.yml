@@ -24,7 +24,7 @@ modules:
         - dejan/rpms
         - peterwu/rendezvous
         - sneexy/zen-browser
-        - lilay/
+        - lilay/topgrade
         - varlad/zellij
       files:
         - https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo

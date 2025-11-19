@@ -1,118 +1,92 @@
 #!/usr/bin/env bash
 
-# Skip aliases and overrides when inside Distrobox
+# 1. Skip aliases and overrides when inside Distrobox
 if [ -n "$DISTROBOX_ENTER_PATH" ]; then
 	return
 fi
 
+# 2. CLEANUP: Remove old function definitions to prevent conflicts
+# This fixes the issue where old "function grep" overrides persist and break autocomplete.
+unset -f grep find tmux ls ll 2>/dev/null
+
+# --- Fastfetch Wrapper ---
 function fastfetch {
-	# Check if the user provided any arguments ($# is the count of arguments)
 	if [ $# -eq 0 ]; then
-		# No arguments? Run the fancy default preset
 		command fastfetch \
 			-l /usr/share/fastfetch/presets/origami/origami-ascii.txt \
 			--logo-color-1 blue \
 			-c /usr/share/fastfetch/presets/origami/origami-fastfetch.jsonc
 	else
-		# Arguments exist (like -c config.cfg)? Pass them through directly.
 		command fastfetch "$@"
 	fi
 }
 
-# --- eza Aliases (no conflicts) ---
-# These are fine as simple aliases.
+# --- eza Aliases ---
 alias la='eza -la --icons'
 alias lt='eza --tree --level=2 --icons'
 
-# This will run all three commands in sequence, stopping if any one of them fails.
 alias update='topgrade'
 
-# --- eza Functions (to override colorls.sh) ---
-# We must unalias them first to avoid a parsing syntax error
-unalias ls 2>/dev/null
-ls() {
-	command eza --icons "$@"
-}
+# --- eza Functions (Override ls/ll) ---
+ls() { command eza --icons "$@"; }
+ll() { command eza -l --icons "$@"; }
 
-unalias ll 2>/dev/null
-ll() {
-	# This specifically overrides 'ls -l --color=auto'
-	command eza -l --icons "$@"
-}
-
-# --- Podman/Docker Aliases ---
+# --- Modern Replacements ---
 alias docker='podman'
 alias docker-compose='podman-compose'
-
 alias cat='bat'
-
 alias sudo='sudo-rs'
 alias su='su-rs'
 
-# Set up fzf key bindings and fuzzy completion
+# --- Initializations ---
 eval "$(fzf --bash)"
-
 eval "$(starship init bash)"
-
 eval "$(zoxide init bash --cmd cd)"
 
 # === uutils-coreutils Aliases ===
-# Dynamically alias all uu_* binaries found in /usr/bin/
-
 for uu_bin in /usr/bin/uu_*; do
-	# Check if the file exists to avoid errors if package is missing
 	[ -e "$uu_bin" ] || continue
-
-	# Extract the command name (remove path and 'uu_' prefix)
 	base_cmd=$(basename "$uu_bin")
 	std_cmd="${base_cmd#uu_}"
-
-	# Skip commands that should not be aliased:
-	# - ls, cat: Handled by eza/bat
-	# - [, test: specific shell builtins that must NOT be aliased
 	case "$std_cmd" in
 	ls | cat | '[' | test) continue ;;
 	esac
-
-	# Create the alias
 	alias "$std_cmd"="$base_cmd"
 done
-# === End of uutils-coreutils Aliases ===
+# === End uutils ===
 
-# --- Nag user to use 'zellij' instead of 'tmux/byobu' ---
+# --- SAFE NAGS (Completion Aware) ---
 
-# 1. Define the logic
-# This function prints the tip, then runs 'byobu' (mimicking your old alias)
+# Helper: Checks if we are in an interactive terminal AND NOT inside an autocomplete script
+function _should_nag {
+	# -t 2 checks if stderr is a screen (interactive)
+	# -z "$COMP_LINE" ensures we are NOT currently pressing Tab (autocomplete)
+	[ -t 2 ] && [ -z "$COMP_LINE" ]
+}
+
+# 1. TMUX -> ZELLIJ
 function _tmux_nag {
-	printf 'Tip: Try using "zellij" for a modern multiplexing experience.\n' >&2
+	if _should_nag; then
+		printf 'Tip: Try using "zellij" for a modern multiplexing experience.\n' >&2
+	fi
 	command byobu "$@"
 }
-
-# 2. Alias 'tmux' to the helper function
-# Interactive use: tmux -> prints tip -> runs byobu
-# Script use: tmux -> runs standard tmux (alias ignored)
 alias tmux='_tmux_nag'
 
-# --- Nag user to use 'fd' instead of 'find' ---
-
-# 1. Define the logic in a helper function
+# 2. FIND -> FD
 function _find_nag {
-	printf 'Tip: Try using "fd" next time for a simpler and faster search.\n' >&2
+	if _should_nag; then
+		printf 'Tip: Try using "fd" next time for a simpler and faster search.\n' >&2
+	fi
 	command find "$@"
 }
-
-# 2. Alias 'find' to that function
-# Scripts will ignore this alias and use the binary directly.
 alias find='_find_nag'
 
-# --- Nag user to use 'rg' instead of 'grep' ---
-
-# 1. Define the logic in a function with a DIFFERENT name
+# 3. GREP -> RG
 function _grep_nag {
-	printf 'Tip: Try using "rg" for a simpler and faster search.\n' >&2
+	if _should_nag; then
+		printf 'Tip: Try using "rg" for a simpler and faster search.\n' >&2
+	fi
 	command grep "$@"
 }
-
-# 2. Alias 'grep' to that function
-# Scripts generally ignore aliases, so they will use the real grep.
 alias grep='_grep_nag'

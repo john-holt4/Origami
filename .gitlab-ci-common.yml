@@ -1,0 +1,24 @@
+# --- Reusable Setup Logic ---
+.setup_env: &setup_env
+  - echo "Waiting for Docker daemon..."
+  - until docker info > /dev/null 2>&1; do sleep 1; done
+  - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+  - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
+  - echo "Logging in to $CI_REGISTRY..."
+  - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+.bluebuild-job-template:
+  tags:
+    - saas-linux-2xlarge-amd64
+  image:
+    name: ghcr.io/blue-build/cli
+    entrypoint: [""]
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
+    S3_ENDPOINT_URL: "https://0041560ce1f22c78111d98dfde401cac.r2.cloudflarestorage.com"
+  before_script:
+    - *setup_env

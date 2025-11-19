@@ -1,127 +1,48 @@
 stages:
-  - build # Build container and push to registry
-  - iso # Pull container, generate ISO, and upload to S3
+  - triggers
+default:
+  interruptible: true
 workflow:
   rules:
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
       when: never
-    - if: "$CI_COMMIT_TAG"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
-      when: never
     - if: "$CI_COMMIT_BRANCH"
-.bluebuild-job-template:
-  tags:
-    - saas-linux-2xlarge-amd64
-  image:
-    name: ghcr.io/blue-build/cli
-    entrypoint: [""]
-  services:
-    - docker:dind
-  # parallel: matrix has been moved to the specific 'prod' jobs
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-    DOCKER_TLS_CERTDIR: /certs
-    DOCKER_TLS_VERIFY: 1
-    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
-    S3_ENDPOINT_URL: "https://0041560ce1f22c78111d98dfde401cac.r2.cloudflarestorage.com"
-  before_script:
-    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
-    - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-    # Log in to the GitLab registry
-    - echo "Logging in to $CI_REGISTRY..."
-    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    - sleep 5
-# This template contains the script for generating and uploading the ISO
-.generate-iso-script:
-  stage: iso
-  before_script:
-    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
-    - export COSIGN_PRIVATE_KEY=$(cat .secure_files/cosign.key)
-    - echo "Logging in to $CI_REGISTRY..."
-    - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    - sleep 5
-    - echo "Installing AWS CLI..."
-    - dnf install -y unzip
-    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-    - unzip awscliv2.zip
-    - ./aws/install
-    - echo "AWS CLI installed."
-  script:
-    - echo "Generating $ISO_NAME from image $IMAGE_NAME..."
-    - bluebuild generate-iso --enrollment-password origami --iso-name $ISO_NAME image $IMAGE_NAME
-    - echo "Uploading $ISO_NAME to $S3_ENDPOINT_URL"
-    - export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY
-    - export AWS_SECRET_ACCESS_KEY=$S3_SECRET_KEY
-    - |
-      aws s3 cp $ISO_NAME s3://origami-linux/$ISO_NAME \
-        --endpoint-url $S3_ENDPOINT_URL
-# --- Rules Templates ---
-.prod-build-rules:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" # Run for schedules
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - recipes/recipe-base.yml
-        - recipes/recipe-nvidia.yml
-        - recipes/recipe-core.yml # Core file triggers prod builds
-    - if: $CI_COMMIT_BRANCH
-      changes:
-        - recipes/recipe-base.yml
-        - recipes/recipe-nvidia.yml
-        - recipes/recipe-core.yml # Core file triggers prod builds
-    - when: never # Do not run otherwise
-.test-build-rules:
+    - if: "$CI_COMMIT_TAG"
+# --- Trigger Base Pipeline ---
+trigger-base:
+  stage: triggers
+  trigger:
+    include: .gitlab-ci-base.yml
+    strategy: depend
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never # DO NOT run test build for schedules
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
+    - changes:
+        - recipes/recipe-base.yml
+        - recipes/recipe-core.yml
+        - .gitlab-ci-base.yml
+# --- Trigger Nvidia Pipeline ---
+trigger-nvidia:
+  stage: triggers
+  trigger:
+    include: .gitlab-ci-nvidia.yml
+    strategy: depend
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - changes:
+        - recipes/recipe-nvidia.yml
+        - recipes/recipe-core.yml
+        - .gitlab-ci-nvidia.yml
+# --- Trigger Test Pipeline ---
+trigger-test:
+  stage: triggers
+  trigger:
+    include: .gitlab-ci-test.yml
+    strategy: depend
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - changes:
         - recipes/recipe-test.yml
         - recipes/recipe-core-test.yml
-    - if: $CI_COMMIT_BRANCH
-      changes:
-        - recipes/recipe-test.yml
-        - recipes/recipe-core-test.yml
-    - when: never # Do not run otherwise
-# --- Production Build Jobs (Base & Nvidia) ---
-build-image-prod:
-  extends:
-    - .bluebuild-job-template
-    - .prod-build-rules
-  stage: build
-  parallel:
-    matrix:
-      - RECIPE: "recipe-base.yml"
-        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami"
-      - RECIPE: "recipe-nvidia.yml"
-        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
-  script:
-    - bluebuild build --verbose --cache-layers --compression-format zstd --push ./recipes/$RECIPE
-generate_and_upload_iso-prod:
-  extends:
-    - .bluebuild-job-template
-    - .generate-iso-script
-    - .prod-build-rules
-  parallel:
-    matrix:
-      - RECIPE: "recipe-base.yml"
-        ISO_NAME: "origami-x86_64.iso"
-        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami"
-      - RECIPE: "recipe-nvidia.yml"
-        ISO_NAME: "origami-nvidia-x86_64.iso"
-        IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
-# --- Test Build Job (No ISO) ---
-build-image-test:
-  extends:
-    - .bluebuild-job-template
-    - .test-build-rules
-  stage: build
-  image:
-    name: ghcr.io/blue-build/cli:main
-    entrypoint: [""]
-  variables:
-    RECIPE: "recipe-test.yml"
-    IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-test"
-  script:
-    - bluebuild build --verbose --cache-layers --compression-format zstd --push ./recipes/$RECIPE
+        - .gitlab-ci-test.yml

@@ -2,10 +2,22 @@
 
 # Skip aliases and overrides when inside Distrobox
 if [ -n "$DISTROBOX_ENTER_PATH" ]; then
-    return
+	return
 fi
 
-alias fastfetch='fastfetch -l /usr/share/fastfetch/presets/origami/origami-ascii.txt --logo-color-1 blue -c /usr/share/fastfetch/presets/origami/origami-fastfetch.jsonc'
+function fastfetch {
+	# Check if the user provided any arguments ($# is the count of arguments)
+	if [ $# -eq 0 ]; then
+		# No arguments? Run the fancy default preset
+		command fastfetch \
+			-l /usr/share/fastfetch/presets/origami/origami-ascii.txt \
+			--logo-color-1 blue \
+			-c /usr/share/fastfetch/presets/origami/origami-fastfetch.jsonc
+	else
+		# Arguments exist (like -c config.cfg)? Pass them through directly.
+		command fastfetch "$@"
+	fi
+}
 
 # --- eza Aliases (no conflicts) ---
 # These are fine as simple aliases.
@@ -19,13 +31,13 @@ alias update='topgrade'
 # We must unalias them first to avoid a parsing syntax error
 unalias ls 2>/dev/null
 ls() {
-    command eza --icons "$@"
+	command eza --icons "$@"
 }
 
 unalias ll 2>/dev/null
 ll() {
-    # This specifically overrides 'ls -l --color=auto'
-    command eza -l --icons "$@"
+	# This specifically overrides 'ls -l --color=auto'
+	command eza -l --icons "$@"
 }
 
 # --- Podman/Docker Aliases ---
@@ -48,46 +60,59 @@ eval "$(zoxide init bash --cmd cd)"
 # Dynamically alias all uu_* binaries found in /usr/bin/
 
 for uu_bin in /usr/bin/uu_*; do
-    # Check if the file exists to avoid errors if package is missing
-    [ -e "$uu_bin" ] || continue
+	# Check if the file exists to avoid errors if package is missing
+	[ -e "$uu_bin" ] || continue
 
-    # Extract the command name (remove path and 'uu_' prefix)
-    base_cmd=$(basename "$uu_bin")
-    std_cmd="${base_cmd#uu_}"
+	# Extract the command name (remove path and 'uu_' prefix)
+	base_cmd=$(basename "$uu_bin")
+	std_cmd="${base_cmd#uu_}"
 
-    # Skip commands that should not be aliased:
-    # - ls, cat: Handled by eza/bat
-    # - [, test: specific shell builtins that must NOT be aliased
-    case "$std_cmd" in
-        ls|cat|'['|test) continue ;;
-    esac
+	# Skip commands that should not be aliased:
+	# - ls, cat: Handled by eza/bat
+	# - [, test: specific shell builtins that must NOT be aliased
+	case "$std_cmd" in
+	ls | cat | '[' | test) continue ;;
+	esac
 
-    # Create the alias
-    alias "$std_cmd"="$base_cmd"
+	# Create the alias
+	alias "$std_cmd"="$base_cmd"
 done
 # === End of uutils-coreutils Aliases ===
 
+# --- Nag user to use 'zellij' instead of 'tmux/byobu' ---
+
+# 1. Define the logic
+# This function prints the tip, then runs 'byobu' (mimicking your old alias)
+function _tmux_nag {
+	printf 'Tip: Try using "zellij" for a modern multiplexing experience.\n' >&2
+	command byobu "$@"
+}
+
+# 2. Alias 'tmux' to the helper function
+# Interactive use: tmux -> prints tip -> runs byobu
+# Script use: tmux -> runs standard tmux (alias ignored)
+alias tmux='_tmux_nag'
 
 # --- Nag user to use 'fd' instead of 'find' ---
-function find {
-    if [ -t 2 ]; then
-        printf 'Tip: Try using "fd" next time for a simpler and faster search.\n' >&2
-    fi
-    command find "$@"
+
+# 1. Define the logic in a helper function
+function _find_nag {
+	printf 'Tip: Try using "fd" next time for a simpler and faster search.\n' >&2
+	command find "$@"
 }
+
+# 2. Alias 'find' to that function
+# Scripts will ignore this alias and use the binary directly.
+alias find='_find_nag'
 
 # --- Nag user to use 'rg' instead of 'grep' ---
-function grep {
-    if [ -t 2 ]; then
-        printf 'Tip: Try using "rg" for a simpler and faster search.\n' >&2
-    fi
-    command grep "$@"
+
+# 1. Define the logic in a function with a DIFFERENT name
+function _grep_nag {
+	printf 'Tip: Try using "rg" for a simpler and faster search.\n' >&2
+	command grep "$@"
 }
 
-# --- Nag user to use 'zellij' instead of 'tmux' ---
-function tmux {
-    if [ -t 2 ]; then
-        printf 'Tip: Try using "zellij" for a better experience.\n' >&2
-    fi
-    command tmux "$@"
-}
+# 2. Alias 'grep' to that function
+# Scripts generally ignore aliases, so they will use the real grep.
+alias grep='_grep_nag'

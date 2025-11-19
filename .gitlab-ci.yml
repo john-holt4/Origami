@@ -1,7 +1,6 @@
 stages:
   - build # Build container and push to registry
   - iso # Pull container, generate ISO, and upload to S3
-
 workflow:
   rules:
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
@@ -11,7 +10,6 @@ workflow:
     - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
       when: never
     - if: "$CI_COMMIT_BRANCH"
-
 .bluebuild-job-template:
   tags:
     - saas-linux-2xlarge-amd64
@@ -34,7 +32,6 @@ workflow:
     - echo "Logging in to $CI_REGISTRY..."
     - echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - sleep 5
-
 # This template contains the script for generating and uploading the ISO
 .generate-iso-script:
   stage: iso
@@ -59,9 +56,7 @@ workflow:
     - |
       aws s3 cp $ISO_NAME s3://origami-linux/$ISO_NAME \
         --endpoint-url $S3_ENDPOINT_URL
-
 # --- Rules Templates ---
-
 .prod-build-rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" # Run for schedules
@@ -76,7 +71,6 @@ workflow:
         - recipes/recipe-nvidia.yml
         - recipes/recipe-core.yml # Core file triggers prod builds
     - when: never # Do not run otherwise
-
 .test-build-rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -90,9 +84,7 @@ workflow:
         - recipes/recipe-test.yml
         - recipes/recipe-core-test.yml
     - when: never # Do not run otherwise
-
 # --- Production Build Jobs (Base & Nvidia) ---
-
 build-image-prod:
   extends:
     - .bluebuild-job-template
@@ -106,7 +98,6 @@ build-image-prod:
         IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
   script:
     - bluebuild build --verbose --cache-layers --compression-format zstd --push ./recipes/$RECIPE
-
 generate_and_upload_iso-prod:
   extends:
     - .bluebuild-job-template
@@ -120,9 +111,7 @@ generate_and_upload_iso-prod:
       - RECIPE: "recipe-nvidia.yml"
         ISO_NAME: "origami-nvidia-x86_64.iso"
         IMAGE_NAME: "registry.gitlab.com/origami-linux/images/origami-nvidia"
-
 # --- Test Build Job (No ISO) ---
-
 build-image-test:
   extends:
     - .bluebuild-job-template

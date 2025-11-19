@@ -46,7 +46,6 @@ eval "$(zoxide init bash --cmd cd)"
 
 # === uutils-coreutils Aliases ===
 # Dynamically alias all uu_* binaries found in /usr/bin/
-# We skip 'ls' (for eza) and 'cat' (for bat) as per your preference.
 
 for uu_bin in /usr/bin/uu_*; do
     # Check if the file exists to avoid errors if package is missing
@@ -56,9 +55,11 @@ for uu_bin in /usr/bin/uu_*; do
     base_cmd=$(basename "$uu_bin")
     std_cmd="${base_cmd#uu_}"
 
-    # Skip specific commands you want to handle differently
+    # Skip commands that should not be aliased:
+    # - ls, cat: Handled by eza/bat
+    # - [, test: specific shell builtins that must NOT be aliased
     case "$std_cmd" in
-        ls|cat) continue ;;
+        ls|cat|'['|test) continue ;;
     esac
 
     # Create the alias

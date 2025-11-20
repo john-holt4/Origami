@@ -28,6 +28,7 @@ modules:
         - https://pkg.cloudflareclient.com/pubkey.gpg
     install:
       packages:
+        - libxcrypt-compat
         - zellij
         - topgrade
         - zen-browser

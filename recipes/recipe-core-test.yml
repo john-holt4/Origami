@@ -30,6 +30,9 @@ modules:
         - https://pkg.cloudflareclient.com/pubkey.gpg
     install:
       packages:
+        - tldr
+        - neovim
+        - python3-neovim
         - zellij
         - topgrade
         - zen-browser

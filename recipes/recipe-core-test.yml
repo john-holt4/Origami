@@ -5,11 +5,13 @@ modules:
     files:
       - source: system
         destination: /
+
   - type: systemd
     system:
       masked:
         - NetworkManager-wait-online.service
         - flatpak-add-fedora-repos.service
+
   - type: dnf
     repos:
       cleanup: true
@@ -28,7 +30,6 @@ modules:
         - https://pkg.cloudflareclient.com/pubkey.gpg
     install:
       packages:
-        - libxcrypt-compat
         - zellij
         - topgrade
         - zen-browser
@@ -71,10 +72,12 @@ modules:
         - nvtop
         - just
         - toolbox
+
   - type: fonts
     fonts:
       nerd-fonts:
         - JetBrainsMono
+
   - type: default-flatpaks
     configurations:
       - notify: false
@@ -88,6 +91,7 @@ modules:
           name: cosmic
           title: COSMIC
           url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+
   - type: script
     scripts:
       - install-theme.sh

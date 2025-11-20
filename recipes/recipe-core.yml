@@ -1,15 +1,18 @@
 # yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
 modules:
   - type: signing
+
   - type: files
     files:
       - source: system
         destination: /
+
   - type: systemd
     system:
       masked:
         - NetworkManager-wait-online.service
         - flatpak-add-fedora-repos.service
+
   - type: dnf
     repos:
       cleanup: true
@@ -70,10 +73,12 @@ modules:
         - nvtop
         - just
         - toolbox
+
   - type: fonts
     fonts:
       nerd-fonts:
         - JetBrainsMono
+
   - type: default-flatpaks
     configurations:
       - notify: false
@@ -87,6 +92,7 @@ modules:
           name: cosmic
           title: COSMIC
           url: https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+
   - type: script
     scripts:
       - install-theme.sh

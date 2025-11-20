@@ -4,8 +4,10 @@ description: "Origami is a next-generation Linux distribution inspired by the ar
 base-image: ghcr.io/blue-build/base-images/fedora-cosmic
 image-version: latest
 blue-build-tag: main
+
 modules:
   - from-file: recipe-core-test.yml
+
   - type: os-release
     properties:
       ID: origami-test
@@ -14,4 +16,5 @@ modules:
       HOME_URL: "https://origami.wf/"
       BUG_REPORT_URL: "https://gitlab.com/groups/origami-linux/-/issues"
       DEFAULT_HOSTNAME: origami
+
   - type: initramfs

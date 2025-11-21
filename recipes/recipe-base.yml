@@ -9,8 +9,7 @@ modules:
 
   - type: os-release
     properties:
-      ID: fedora
-      VARIANT: Sway Atomic
+      ID: origami
       NAME: Origami Linux
       PRETTY_NAME: Origami 折り紙
       HOME_URL: "https://origami.wf/"

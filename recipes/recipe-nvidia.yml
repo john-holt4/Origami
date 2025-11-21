@@ -14,8 +14,7 @@ modules:
 
   - type: os-release
     properties:
-      ID: fedora
-      VARIANT: Sway Atomic
+      ID: origami-nvidia
       NAME: Origami Linux Nvidia
       PRETTY_NAME: Origami 折り紙
       HOME_URL: "https://origami.wf/"
